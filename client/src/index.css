@@ -1,0 +1,67 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #3b82f6;
+}
+
+button {
+    padding: 4px 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+/* App.tsx styles */
+main {
+    margin: auto;
+    margin-top: 50px;
+    padding: 30px;
+    width: 500px;
+    height: auto;
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+
+form {
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+}
+
+form > input {
+    padding: 10px 16px;
+    width: 75%;
+    border: 1px solid #3b82f6;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    outline: none;
+}
+
+form > button {
+    color: #ffffff;
+    font-weight: 700;
+    padding: 10px 16px;
+    width: 25%;
+    border: 1px solid #3b82f6;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: #3b82f6;
+}
+
+.tasks-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Utility Classes */
+.flex {
+    display: flex;
+    align-items: center;
+}

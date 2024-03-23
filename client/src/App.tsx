@@ -1,19 +1,24 @@
-import { useReducer } from "react";
+import { useRef, useReducer } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { TaskProps } from "./types/Task";
 import { initialState, taskReducer } from "./reducers/taskReducer";
+import TaskCard from "./components/TaskCard/TaskCard";
 
 function App() {
+    const titleRef = useRef<HTMLInputElement>(null);
     const [state, dispatch] = useReducer(taskReducer, initialState);
 
     const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const form = event.currentTarget;
-        const data = Object.fromEntries(new FormData(form).entries());
-        const newTask = {...data, id: uuidv4()} as TaskProps;
-
+        // Validation
+        if (titleRef.current?.value.trim() === "") {
+            return  alert("Task title should not be empty!");
+        }
+        // Adding it to tasks state
+        const taskTitle = titleRef.current?.value;
+        const newTask = {title: taskTitle, isCompleted: false, id: uuidv4()} as TaskProps;
         dispatch({ type: "Add", payload: newTask })
-        form.reset();
+        event.currentTarget.reset();
     }
 
     const handleDelete = (id: string) => {
@@ -21,26 +26,22 @@ function App() {
     }
 
     return (
-        <>
+        <main>
             <form onSubmit={handleAddTask}>
-                <input name="title" type="text" placeholder="title"/>
-                <input name="description" type="text" placeholder="description"/>
+                <input ref={titleRef} type="text" placeholder="Enter title..."/>
                 <button type="submit">+Add Task</button>
             </form>
 
-            <div>
+            <div className="tasks-container">
                 {state.tasks.length > 0 
                 ? (
-                    state.tasks.map((task, index) => (
-                        <div key={task.id}>
-                            <p>{index + 1}.{task.title}</p>
-                            <button onClick={() => handleDelete(task.id)}>Delete</button>
-                        </div>
+                    state.tasks.map((task: TaskProps) => (
+                        <TaskCard task={task} handleDelete={handleDelete} key={task.id}/>
                     ))
                 ) 
                 : (<div>No tasks to display</div>)}
             </div>
-        </>
+        </main>
     );
 }
 

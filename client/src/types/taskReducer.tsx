@@ -4,7 +4,14 @@ export type InitialStateProps = {
     tasks: TaskProps[];
 }
 
-export type ActionProps = {
-    type: "Add" | "Delete";
-    payload: TaskProps | string;
+type AddProps = {
+    type: "Add";
+    payload: TaskProps;
 }
+
+type DeleteProps = {
+    type: "Delete";
+    payload: string;
+}
+
+export type ActionProps = AddProps | DeleteProps;
