@@ -1,48 +1,35 @@
-import { useRef, useReducer } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { TaskProps } from "./types/Task";
-import { initialState, taskReducer } from "./reducers/taskReducer";
-import TaskCard from "./components/TaskCard/TaskCard";
+import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import MainLayout from "./layouts/MainLayout";
+import PageLayout from "./layouts/PageLayout";
+import Navbar from "./components/Navbar";
+import Loading from "./components/Loading";
+
+const Home = lazy(() => import("./pages/Home"));
+const Signin = lazy(() => import("./pages/Signin"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 
 function App() {
-    const titleRef = useRef<HTMLInputElement>(null);
-    const [state, dispatch] = useReducer(taskReducer, initialState);
-
-    const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        // Validation
-        if (titleRef.current?.value.trim() === "") {
-            return  alert("Task title should not be empty!");
-        }
-        // Adding it to tasks state
-        const taskTitle = titleRef.current?.value;
-        const newTask = {title: taskTitle, isCompleted: false, id: uuidv4()} as TaskProps;
-        dispatch({ type: "Add", payload: newTask })
-        event.currentTarget.reset();
-    }
-
-    const handleDelete = (id: string) => {
-        dispatch({ type: "Delete", payload: id });
-    }
-
     return (
-        <main>
-            <form onSubmit={handleAddTask}>
-                <input ref={titleRef} type="text" placeholder="Enter title..."/>
-                <button type="submit">+Add Task</button>
-            </form>
-
-            <div className="tasks-container">
-                {state.tasks.length > 0 
-                ? (
-                    state.tasks.map((task: TaskProps) => (
-                        <TaskCard task={task} handleDelete={handleDelete} key={task.id}/>
-                    ))
-                ) 
-                : (<div>No tasks to display</div>)}
-            </div>
-        </main>
+        <MainLayout>
+            <ToastContainer />
+            <Navbar />
+            <Suspense fallback={<Loading />}>
+                <PageLayout>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/signin" element={<Signin />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                    </Routes>
+                </PageLayout>
+            </Suspense>
+        </MainLayout>
     );
 }
 
 export default App;
+

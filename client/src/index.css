@@ -1,67 +1,23 @@
-/* Global styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #3b82f6;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 button {
-    padding: 4px 10px;
-    border: none;
-    outline: none;
-    cursor: pointer;
+    @apply text-white text-lg font-medium px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 duration-500;
 }
 
-/* App.tsx styles */
-main {
-    margin: auto;
-    margin-top: 50px;
-    padding: 30px;
-    width: 500px;
-    height: auto;
-    border-radius: 16px;
-    background-color: #ffffff;
+input {
+    @apply outline-none px-4;
 }
 
-form {
-    margin-bottom: 30px;
-    width: 100%;
-    display: flex;
+::-webkit-scrollbar {
+    @apply w-1;
 }
 
-form > input {
-    padding: 10px 16px;
-    width: 75%;
-    border: 1px solid #3b82f6;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    outline: none;
+::-webkit-scrollbar-track {
+    @apply bg-white;
 }
 
-form > button {
-    color: #ffffff;
-    font-weight: 700;
-    padding: 10px 16px;
-    width: 25%;
-    border: 1px solid #3b82f6;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    background-color: #3b82f6;
-}
-
-.tasks-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Utility Classes */
-.flex {
-    display: flex;
-    align-items: center;
+::-webkit-scrollbar-thumb {
+    @apply rounded-md bg-blue-500;
 }
