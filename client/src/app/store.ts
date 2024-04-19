@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userApi } from "../services/userApi";
-import toastReducer from "../features/toast";
+import { boardApi } from "../services/boardApi";
+import LoadingSlice from "../features/loading";
 
 export const store = configureStore({
     reducer: {
-        toast: toastReducer,
+        loading: LoadingSlice,
         [userApi.reducerPath]: userApi.reducer,
+        [boardApi.reducerPath]: boardApi.reducer,
     },
     middleware: (getDefaultMiddleware) => 
-        getDefaultMiddleware().concat(userApi.middleware),
+        getDefaultMiddleware().concat(userApi.middleware, boardApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

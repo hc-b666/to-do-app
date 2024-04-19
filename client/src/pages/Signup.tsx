@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSignupMutation } from "../services/userApi";
-import Loading from "../components/Loading";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useSignupMutation } from "../services/userApi";
+import { setLoading, stopLoading } from "../features/loading";
 
 export default function Signup() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [useSignUp, { isLoading, isError, isSuccess, data }] =
         useSignupMutation();
 
@@ -32,9 +34,11 @@ export default function Signup() {
         }
     }, [isSuccess, data]);
 
+    if (isLoading) dispatch(setLoading());
+    if (isSuccess || isError) dispatch(stopLoading());
+
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            {isLoading && <Loading />}
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-10 w-auto"

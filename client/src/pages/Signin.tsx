@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { setLoading, stopLoading } from "../features/loading";
 import { useSigninMutation } from "../services/userApi";
-import Loading from "../components/Loading";
 
 export default function Signin() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [useSignIn, { isLoading, isError, isSuccess, data }] = useSigninMutation();
 
@@ -31,9 +33,11 @@ export default function Signin() {
         }
     }, [isSuccess, data]);
 
+    if (isLoading) dispatch(setLoading());
+    if (isSuccess || isError) dispatch(stopLoading());
+
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            {isLoading && <Loading />}
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-10 w-auto"

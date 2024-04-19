@@ -5,7 +5,9 @@ import MongoStore from "connect-mongo";
 import createHttpError, { isHttpError } from "http-errors";
 import cors from "cors";
 import env from "./config/validateEnv";
+import { requiresAuth } from "./middlewares/auth";
 import usersRouter from "./routes/usersRouter";
+import boardsRouter from "./routes/boardsRouter";
 
 const app = express();
 app.use(cors({
@@ -30,6 +32,7 @@ app.use(
 );
 
 app.use("/users", usersRouter);
+app.use("/boards", requiresAuth, boardsRouter);
 
 app.use((req, res, next) => {
     next(createHttpError(404, "Page not found!"));

@@ -8,7 +8,7 @@ const links = [
 
 export default function Navbar() {
     const navigate = useNavigate();
-    const { data: user, isError } = useGetUserQuery();
+    const { isSuccess } = useGetUserQuery();
 
     return (
         <nav className="w-full px-20 py-4 shadow flex items-center justify-between">
@@ -31,7 +31,7 @@ export default function Navbar() {
                 ))}
             </div>
 
-            {isError ? null : (
+            {isSuccess ? null : (
                 <div className="flex gap-3">
                     <button onClick={() => navigate("/signin")}>Sign In</button>
                     <button onClick={() => navigate("/signup")}>Sign Up</button>

@@ -1,13 +1,28 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { useGetUserQuery } from "../services/userApi";
+import { setLoading, stopLoading } from "../features/loading";
+import Sidebar from "../components/Sidebar";
 
 export default function Dashboard() {
-    const { data: user, isLoading, isError, isSuccess } = useGetUserQuery();
+    const dispatch = useDispatch();
+    const { isLoading, isError, isSuccess } = useGetUserQuery();
+
+    useEffect(() => {
+        if (isLoading) dispatch(setLoading());
+        if (isSuccess || isError) dispatch(stopLoading());
+    }, [isLoading, isError, isSuccess]);
 
     return (
-        <div>
-            {isLoading && <div>Loading...</div>}
-            {isError && <div>Error</div>}
-            {isSuccess && <div>{user?.email}</div>}
-        </div>
+        <>
+            {isError && toast.error("Error occured!")}
+            <div className="flex w-full h-screen">
+                <Sidebar />
+                <main className="w-full">
+                    main
+                </main>
+            </div>
+        </>
     );
 }

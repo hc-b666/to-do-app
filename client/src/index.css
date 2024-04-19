@@ -10,6 +10,10 @@ input {
     @apply outline-none px-4;
 }
 
+.board {
+    @apply py-3 px-5 w-[275px];
+}
+
 ::-webkit-scrollbar {
     @apply w-1;
 }
