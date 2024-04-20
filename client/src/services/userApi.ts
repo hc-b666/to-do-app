@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({
     reducerPath: "userApi",
-    baseQuery: fetchBaseQuery({ 
-        baseUrl: "http://localhost:8080/users", 
+    baseQuery: fetchBaseQuery({
+        baseUrl: "http://localhost:8080/users",
         credentials: "include",
     }),
     tagTypes: ["User"],
@@ -28,9 +28,20 @@ export const userApi = createApi({
                 url: "/signin",
                 method: "POST",
                 body: user,
-            })
-        }), 
+            }),
+        }),
+        signout: builder.mutation({
+            query: () => ({
+                url: "/signout",
+                method: "POST",
+            }),
+        }),
     }),
 });
 
-export const { useGetUserQuery, useSignupMutation, useSigninMutation } = userApi;
+export const {
+    useGetUserQuery,
+    useSignupMutation,
+    useSigninMutation,
+    useSignoutMutation,
+} = userApi;

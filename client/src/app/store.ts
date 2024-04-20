@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userApi } from "../services/userApi";
 import { boardApi } from "../services/boardApi";
-import LoadingSlice from "../features/loading";
+import authReducer from "../features/authSlice";
+import modalReducer from "../features/modalSlice";
+import boardReducer from "../features/boardSlice";
 
 export const store = configureStore({
     reducer: {
-        loading: LoadingSlice,
+        auth: authReducer,
+        modal: modalReducer,
+        board: boardReducer,
         [userApi.reducerPath]: userApi.reducer,
         [boardApi.reducerPath]: boardApi.reducer,
     },

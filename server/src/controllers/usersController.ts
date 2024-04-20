@@ -109,7 +109,7 @@ export const signin: RequestHandler<
         }
 
         req.session.userId = user._id;
-        res.status(201).json({ status: 201, data: { message: "Successfully signed in!" } });
+        res.status(201).json({ status: 201, data: { message: "Successfully signed in!" }, user });
     } catch (err) {
         next(err);
     }

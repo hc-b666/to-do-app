@@ -3,8 +3,10 @@ import createHttpError from "http-errors";
 import Board from "../models/board";
 
 export const getBoards: RequestHandler = async (req, res, next) => {
+    const userId = req.session.userId;
+
     try {
-        const boards = await Board.find().exec();
+        const boards = await Board.find({ userId }).exec();
 
         res.status(200).json({ boards });
     } catch (err) {

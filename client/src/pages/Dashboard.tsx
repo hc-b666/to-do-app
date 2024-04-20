@@ -1,26 +1,35 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useGetUserQuery } from "../services/userApi";
-import { setLoading, stopLoading } from "../features/loading";
+import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { AuthState } from "../features/authSlice";
+import { useGetBoardsQuery } from "../services/boardApi";
+import { setBoards } from "../features/boardSlice";
 
 export default function Dashboard() {
     const dispatch = useDispatch();
-    const { isLoading, isError, isSuccess } = useGetUserQuery();
+    const { isLoading, isError, error } = useGetUserQuery();
+    const { userInfo } = useSelector((state: RootState) => state.auth) as AuthState;
+    
+    const { data: boardsData, isSuccess } = useGetBoardsQuery();
 
-    useEffect(() => {
-        if (isLoading) dispatch(setLoading());
-        if (isSuccess || isError) dispatch(stopLoading());
-    }, [isLoading, isError, isSuccess]);
+    if (isSuccess) {
+        dispatch(setBoards(boardsData.boards));
+    }
 
     return (
         <>
-            {isError && toast.error("Error occured!")}
-            <div className="flex w-full h-screen">
+            {isLoading && <Loading />}
+            {isError && toast.error("Error occured")}
+            <div className="flex h-screen w-full">
                 <Sidebar />
-                <main className="w-full">
-                    main
+                <main className="p-5 w-full">
+                    <nav>
+
+                    </nav>
+                    current user is {userInfo?.username}
                 </main>
             </div>
         </>

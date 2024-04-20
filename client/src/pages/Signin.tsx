@@ -1,43 +1,48 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { setLoading, stopLoading } from "../features/loading";
 import { useSigninMutation } from "../services/userApi";
+import Loading from "../components/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { setCredentials } from "../features/authSlice";
+import Input from "../components/forms/Input";
 
 export default function Signin() {
     const dispatch = useDispatch();
+    const { userInfo } = useSelector((state: RootState) => state.auth);
     const navigate = useNavigate();
-    const [useSignIn, { isLoading, isError, isSuccess, data }] = useSigninMutation();
+    const [useSignIn, { isLoading, isSuccess, data }] = useSigninMutation();
+
+    useEffect(() => {
+        if (userInfo) {
+            navigate("/");
+        }
+    }, [navigate, userInfo]);
 
     const handleSignin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const user = Object.fromEntries(new FormData(event.currentTarget));
 
         try {
-            await useSignIn(user).unwrap();
+            const res = await useSignIn(user).unwrap();
+            dispatch(setCredentials({ ...res.user }));  
         } 
         catch (err: any) {
-            if (isError) {
-                console.log(err);
-            }
-            toast.error(err.data.error);
+            toast.error(err?.data?.error || err.error );
         }
     }
 
     useEffect(() => {
         if (isSuccess && data) {
-            console.log(data);
             navigate("/dashboard");
             toast.success(data.data.message);
         }
     }, [isSuccess, data]);
 
-    if (isLoading) dispatch(setLoading());
-    if (isSuccess || isError) dispatch(stopLoading());
-
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            {isLoading && <Loading />}
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-10 w-auto"
@@ -50,52 +55,8 @@ export default function Signin() {
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleSignin} className="space-y-6">
-                    <div>
-                        <label
-                            htmlFor="username"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                            Username
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="username"
-                                name="username"
-                                type="text"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="flex items-center justify-between">
-                            <label
-                                htmlFor="password"
-                                className="block text-sm font-medium leading-6 text-gray-900"
-                            >
-                                Password
-                            </label>
-                            <div className="text-sm">
-                                <a
-                                    href="#"
-                                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                                >
-                                    Forgot password?
-                                </a>
-                            </div>
-                        </div>
-                        <div className="mt-2">
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
+                    <Input name={"username"} type={"text"} />
+                    <Input name={"password"} type={"password"} autoComplete={"password"} />
 
                     <div>
                         <button
