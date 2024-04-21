@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-button {
+/* button {
     @apply rounded-md bg-blue-500 px-4 py-2 text-lg font-medium text-white duration-500 hover:bg-blue-600;
-}
+} */
 
 input {
     @apply px-4 outline-none;
@@ -15,7 +15,7 @@ input {
 }
 
 .board {
-    @apply w-[275px] cursor-pointer px-5 py-3 shadow-sm hover:bg-blue-400 hover:text-white;
+    @apply w-[275px] cursor-pointer px-5 py-3 text-black shadow-sm hover:bg-blue-400 hover:text-white dark:text-white dark:shadow-slate-500;
 }
 
 .modal-overlay {

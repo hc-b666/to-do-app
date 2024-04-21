@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../app/store";
-import { useSignoutMutation } from "../services/userApi";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
-import { logout } from "../features/authSlice";
+import { RootState } from "../app/store";
+import { useSignoutMutation } from "@services/userApi";
+import { logout } from "@features/authSlice";
+import Button from "./ui/Button";
 
 const links = [
     { title: "Home", path: "/" },
@@ -24,7 +25,7 @@ export default function Navbar() {
         } catch (err) {
             toast.error(error?.data?.message || err.error);
         }
-    }
+    };
 
     useEffect(() => {
         if (isSuccess) {
@@ -33,7 +34,7 @@ export default function Navbar() {
     }, [isSuccess]);
 
     return (
-        <nav className="flex w-full items-center justify-between px-20 py-4 shadow">
+        <nav className="flex w-full items-center justify-between bg-white px-20 py-4 shadow shadow-black dark:bg-slate-900 dark:text-white dark:shadow-slate-100">
             <NavLink to={"/"} className="flex gap-1">
                 <img
                     className="h-12 w-12 rounded"
@@ -57,14 +58,17 @@ export default function Navbar() {
 
             {userInfo ? (
                 <div>
-                    <button onClick={handleSignOut}>
-                        Sign Out
-                    </button>
+                    <Button onClick={handleSignOut}>Sign Out</Button>
                 </div>
             ) : (
                 <div className="flex gap-3">
-                    <button onClick={() => navigate("/signin")}>Sign In</button>
-                    <button onClick={() => navigate("/signup")}>Sign Up</button>
+                    <Button onClick={() => navigate("/signin")}>Sign In</Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => navigate("/signup")}
+                    >
+                        Sign Up
+                    </Button>
                 </div>
             )}
         </nav>

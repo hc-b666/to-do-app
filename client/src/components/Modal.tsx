@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { hideModal } from "../features/modalSlice";
-import { RootState } from "../app/store";
-import Input from "./forms/Input";
-import { ModalState } from "../features/modalSlice";
-import { useCreateBoardMutation } from "../services/boardApi";
 import { toast } from "react-toastify";
+import { RootState } from "../app/store";
+import { useCreateBoardMutation } from "@services/boardApi";
+import { hideModal, ModalState } from "@features/modalSlice";
+import Input from "./ui/Input";
 
 export default function Modal() {
     const dispatch = useDispatch();

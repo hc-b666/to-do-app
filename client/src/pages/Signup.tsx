@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useSignupMutation } from "../services/userApi";
-import Loading from "../components/Loading";
 import { RootState } from "../app/store";
-import Input from "../components/forms/Input";
+import { useSignupMutation } from "@services/userApi";
+import Loading from "@components/Loading";
+import Input from "@components/ui/Input";
+import Button from "@components/ui/Button";
 
 export default function Signup() {
     const { userInfo } = useSelector((state: RootState) => state.auth);
@@ -54,16 +55,21 @@ export default function Signup() {
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleSignUp} className="space-y-6">
                     <Input name={"username"} type={"text"} />
-                    <Input name={"email"} type={"email"} autoComplete={"email"} />
-                    <Input name={"password"} type={"password"} autoComplete={"password"} />
-                    
+                    <Input
+                        name={"email"}
+                        type={"email"}
+                        autoComplete={"email"}
+                    />
+                    <Input
+                        name={"password"}
+                        type={"password"}
+                        autoComplete={"password"}
+                    />
+
                     <div>
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
+                        <Button type="submit" variant="formButton">
                             Sign Up
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useSigninMutation } from "../services/userApi";
-import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { RootState } from "../app/store";
-import { setCredentials } from "../features/authSlice";
-import Input from "../components/forms/Input";
+import { useSigninMutation } from "@services/userApi";
+import { setCredentials } from "@features/authSlice";
+import Loading from "@components/Loading";
+import Input from "@components/ui/Input";
+import Button from "@components/ui/Button";
 
 export default function Signin() {
     const dispatch = useDispatch();
@@ -26,12 +27,11 @@ export default function Signin() {
 
         try {
             const res = await useSignIn(user).unwrap();
-            dispatch(setCredentials({ ...res.user }));  
-        } 
-        catch (err: any) {
-            toast.error(err?.data?.error || err.error );
+            dispatch(setCredentials({ ...res.user }));
+        } catch (err: any) {
+            toast.error(err?.data?.error || err.error);
         }
-    }
+    };
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -56,15 +56,16 @@ export default function Signin() {
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleSignin} className="space-y-6">
                     <Input name={"username"} type={"text"} />
-                    <Input name={"password"} type={"password"} autoComplete={"password"} />
+                    <Input
+                        name={"password"}
+                        type={"password"}
+                        autoComplete={"password"}
+                    />
 
                     <div>
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
+                        <Button type="submit" variant="formButton">
                             Sign in
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

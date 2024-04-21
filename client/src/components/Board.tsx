@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { BoardState, setCurrentBoard } from "../features/boardSlice";
+import { BoardState, setCurrentBoard } from "@features/boardSlice";
 
 interface BoardProps {
     board: {
