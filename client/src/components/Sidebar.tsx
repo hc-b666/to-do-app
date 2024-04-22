@@ -10,7 +10,7 @@ export default function Sidebar() {
     const dispatch = useDispatch();
     const { handleTheme } = useTheme();
 
-    const { boards } = useSelector(
+    const { boards, currentBoardId } = useSelector(
         (state: RootState) => state.board,
     ) as BoardState;
 

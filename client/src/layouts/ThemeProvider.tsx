@@ -28,7 +28,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
 
     const handleTheme = () => {
         setTheme(theme === "dark" ? "light" : "dark");
-        console.log("clicked")
     };
 
     return (

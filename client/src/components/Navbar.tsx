@@ -6,6 +6,7 @@ import { RootState } from "../app/store";
 import { useSignoutMutation } from "@services/userApi";
 import { logout } from "@features/authSlice";
 import Button from "./ui/Button";
+import { resetBoards } from "@features/boardSlice";
 
 const links = [
     { title: "Home", path: "/" },
@@ -21,6 +22,7 @@ export default function Navbar() {
     const handleSignOut = async () => {
         try {
             const res = await signout().unwrap();
+            // await dispatch(resetBoards());
             dispatch(logout());
         } catch (err) {
             toast.error(error?.data?.message || err.error);
@@ -30,6 +32,7 @@ export default function Navbar() {
     useEffect(() => {
         if (isSuccess) {
             toast.success(data?.message);
+            dispatch(resetBoards());
         }
     }, [isSuccess]);
 

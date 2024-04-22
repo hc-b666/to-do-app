@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { BoardState, setCurrentBoard } from "@features/boardSlice";
+import { BoardState, setCurrentBoard, setCurrentBoardId } from "@features/boardSlice";
 
 interface BoardProps {
     board: {
@@ -16,9 +16,14 @@ export default function Board({ board }: BoardProps) {
         (state: RootState) => state.board,
     ) as BoardState;
 
+    const handleClick = (board: { _id: string, title: string }) => {
+        dispatch(setCurrentBoard(board));
+        dispatch(setCurrentBoardId(board._id));
+    }
+
     return (
         <div
-            onClick={() => dispatch(setCurrentBoard(board))}
+            onClick={() => handleClick(board)}
             className={`board ${
                 currentBoardId === _id ? "bg-blue-500 text-white" : ""
             }`}

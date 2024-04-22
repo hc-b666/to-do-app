@@ -1,39 +1,60 @@
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { RootState } from "../app/store";
-import { useGetUserQuery } from "@services/userApi";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "src/app/store";
 import { useGetBoardsQuery } from "@services/boardApi";
-import { AuthState } from "@features/authSlice";
+import { useGetTasksQuery } from "@services/taskApi";
 import { setBoards } from "@features/boardSlice";
-import Loading from "@components/Loading";
 import Sidebar from "@components/Sidebar";
-import Button from "@components/ui/Button";
+
+interface Task {
+    _id: string;
+    title: string;
+    description: string;
+    status: boolean;
+    boardId: string;
+}
 
 export default function Dashboard() {
     const dispatch = useDispatch();
-    const { isLoading, isError, error } = useGetUserQuery();
-    const { userInfo } = useSelector(
-        (state: RootState) => state.auth,
-    ) as AuthState;
+    const { currentBoardId } = useSelector((state: RootState) => state.board);
 
-    const { data: boardsData, isSuccess } = useGetBoardsQuery();
+    const { data: boardsData, isSuccess: bsucc } = useGetBoardsQuery();
 
-    if (isSuccess) {
-        dispatch(setBoards(boardsData.boards));
-    }
+    const { data: taskData, isSuccess: taskSuccess } = currentBoardId
+        ? useGetTasksQuery(currentBoardId)
+        : { data: [], isSuccess: false };
+
+    const [tasks, setTasks] = useState(taskData);
+
+    useEffect(() => {
+        if (taskSuccess) {
+            setTasks(taskData);
+        }
+    }, [taskSuccess]);
+
+    useEffect(() => {
+        if (bsucc) {
+            dispatch(setBoards(boardsData.boards));
+        }
+    }, [bsucc, boardsData]);
 
     return (
         <>
-            {isLoading && <Loading />}
-            {isError && toast.error("Error occured")}
-            <div className="flex h-screen w-full bg-white dark:bg-slate-900 text-white">
+            <div className="flex h-screen w-full bg-white text-white dark:bg-slate-900">
                 <Sidebar />
                 <main className="w-full p-5">
                     <nav></nav>
-                    current user is {userInfo?.username}
-                    <div className="flex flex-col items-start">
-                        <Button variant="primary">primary</Button>
-                        <Button variant="secondary">secondary</Button>
+                    <div className="flex h-full flex-grow items-center justify-center">
+                        {tasks.length > 0 ? (
+                            tasks.map((task: Task) => (
+                                <div key={task._id}>
+                                    <h1>{task.title}</h1>
+                                    <p>{task.description}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <h1>Choose a board to see tasks</h1>
+                        )}
                     </div>
                 </main>
             </div>

@@ -27,8 +27,13 @@ const boardSlice = createSlice({
         setCurrentBoardId: (state, action) => {
             state.currentBoardId = action.payload;
         },
+        resetBoards: (state) => {
+            state.boards = [];
+            state.currentBoard = null;
+            state.currentBoardId = "";
+        }
     },
 });
 
-export const { setBoards, setCurrentBoard, setCurrentBoardId } = boardSlice.actions;
+export const { setBoards, setCurrentBoard, setCurrentBoardId, resetBoards } = boardSlice.actions;
 export default boardSlice.reducer;

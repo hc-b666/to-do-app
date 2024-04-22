@@ -35,7 +35,7 @@ export default function Signin() {
 
     useEffect(() => {
         if (isSuccess && data) {
-            navigate("/dashboard");
+            navigate("/");
             toast.success(data.data.message);
         }
     }, [isSuccess, data]);
