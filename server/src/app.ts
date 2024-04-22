@@ -8,6 +8,7 @@ import env from "./config/validateEnv";
 import { requiresAuth } from "./middlewares/auth";
 import usersRouter from "./routes/usersRouter";
 import boardsRouter from "./routes/boardsRouter";
+import taskRouter from "./routes/tasksRouter";
 
 const app = express();
 app.use(cors({
@@ -33,6 +34,7 @@ app.use(
 
 app.use("/users", usersRouter);
 app.use("/boards", requiresAuth, boardsRouter);
+app.use("/tasks", requiresAuth, taskRouter);
 
 app.use((req, res, next) => {
     next(createHttpError(404, "Page not found!"));
