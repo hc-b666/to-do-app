@@ -1,0 +1,78 @@
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const db = require('../database/database');
+
+const SECRET_KEY = 'todo-app-super-secret-key';
+
+// 200 - OK
+// 201 - Created
+// 400 - Bad Request
+// 401 - Unauthorized
+// 500 - Internal Server Error
+
+exports.signup = (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+  }
+
+  const checkUserSql = `SELECT * FROM users WHERE username = ?`;
+
+  db.get(checkUserSql, [username], (err, row) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).json({ error: 'Error checking username', status: 500 }); // Database error
+    }
+
+    if (row) {
+      return res.status(400).json({ error: 'Username already exists', status: 400 }); // username already exists
+    } else {
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const insertUserSql = `INSERT INTO users (username, password) VALUES (?, ?)`;
+
+      db.run(insertUserSql, [username, hashedPassword], function(err) {
+        if (err) {
+          console.error('Error with creating user:', err.message);
+          return res.status(500).json({ error: 'Error creating user', status: 500 }); // Database error
+        }
+
+        const userId = this.lastID;
+        const token = jwt.sign({ userId, username }, SECRET_KEY, { expiresIn: '24h' });
+
+        res.status(201).json({ token, status: 201 }); // Response
+      });
+    }
+  });
+};
+
+exports.signin = (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+  }
+
+  const getUserSql = `SELECT * FROM users WHERE username = ?`;
+
+  db.get(getUserSql, [username], (err, row) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).json({ error: 'Error checking username', status: 500 }); // Database error
+    }
+
+    if (!row) {
+      return res.status(400).json({ error: 'Invalid username or password', status: 400 }); // username not found
+    }
+
+    const isValidPassword = bcrypt.compareSync(password, row.password);
+
+    if (!isValidPassword) {
+      return res.status(400).json({ error: 'Invalid username or password', status: 400 }); // password is incorrect
+    }
+
+    const token = jwt.sign({ userId: row.id, username }, SECRET_KEY, { expiresIn: '24h' });
+
+    res.status(200).json({ token, status: 200 }); // Response
+  });
+};
