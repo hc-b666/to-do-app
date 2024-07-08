@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+// ToDo - Corrert the type error or change everything to axios
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({

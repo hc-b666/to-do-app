@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Sidebar } from "./components/Sidebar";
@@ -7,7 +7,7 @@ import { Navbar } from "./components/Navbar";
 import Signup from "./pages/auth/Signup";
 import Singin from "./pages/auth/Signin";
 import Home from "./pages/dashboard/Home";
-import Week from "./pages/dashboard/Week";
+import Upcoming from "./pages/dashboard/Upcoming";
 
 export const App = () => {
   const navigate = useNavigate();
@@ -26,20 +26,21 @@ export const App = () => {
       <Route path="/signin" element={<Singin />} />
       <Route path="/dashboard" element={<PrivateRoutes />}>
         <Route path="" element={<Home />} />
-        <Route path="week" element={<Week />} />
+        <Route path="upcoming" element={<Upcoming />} />
       </Route>
     </Routes>
   );
 };
 
 function PrivateRoutes() {
+  const [sidebarState, setSidebarState] = useState(true); 
   const token = localStorage.getItem("token");
 
   return token ? (
     <div className="flex">
-      <Sidebar />
+      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <div className="w-full flex flex-col">
-        <Navbar />
+        <Navbar sidebarState={sidebarState} setSidebarState={setSidebarState} />
         <Outlet />
       </div>
     </div>
