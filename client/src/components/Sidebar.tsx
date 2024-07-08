@@ -12,7 +12,7 @@ interface ISidebar {
 export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   const [taskModal, setTaskModal] = useState(false);
   const [title, setTitle] = useState("");
-  const [deadline, setDeadline] = useState('');
+  const [deadline, setDeadline] = useState("");
   const { data: statusesData } = useGetStatusesQuery(undefined);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
         <Modal state={taskModal} setState={setTaskModal}>
           <h3 className="text-xl mb-5">Add Task Form</h3>
           <form onSubmit={createTaskHandler}>
-            <input name="title" id="title" type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} required />
+            <input name="title" id="title" type="text" placeholder="Title" onChange={(e) => setTitle(e.currentTarget.value)} required />
             <input name="description" id="description" type="text" placeholder="description" required />
             <input name="deadline" id="deadline" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} required />
             <select name="status" id="status">
@@ -89,6 +89,9 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
                 <option value={status} key={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</option>
               ))}
             </select>
+            <button className="text-white text-base font-semibold py-2 px-4 bg-purple-700 hover:bg-purple-500 rounded-lg duration-300" type="submit">
+              + Add Task
+            </button>
           </form>
         </Modal>
       )}
@@ -101,24 +104,22 @@ const parseTimeFromTitle = (title: string) => {
   const match = title.match(timePattern);
 
   if (match) {
-    let hour = parseInt(match[1], 10);
+    let hour = parseInt(match[1]);
     const minute = match[2] ? parseInt(match[2], 10) : 0;
-    const period = match[3];
+    const period = match[3]?.toLowerCase(); 
 
-    if (period) {
-      if (period.toLowerCase() === 'pm' && hour < 12) {
-        hour += 12;
-      }
-      if (period.toLowerCase() === 'am' && hour === 12) {
-        hour = 0;
-      }
-    } else if (hour === 12) {
-      hour = 12;
+    if (period === "pm" && hour < 12) {
+      hour += 12;
+    } else if (period === "am" && hour === 12) {
+      hour = 0;
     }
 
     const date = new Date();
     date.setHours(hour, minute, 0, 0);
-    return date.toISOString().slice(0, 16); 
+
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    const localTime = new Date(date.getTime() - timezoneOffset);
+    return localTime.toISOString().slice(0, 16);
   }
   return '';
 };
