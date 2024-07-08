@@ -1,4 +1,6 @@
-import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import { Sidebar } from "./components/Sidebar";
 import { Navbar } from "./components/Navbar";
 
@@ -8,6 +10,16 @@ import Home from "./pages/dashboard/Home";
 import Week from "./pages/dashboard/Week";
 
 export const App = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem("token"); 
+      navigate("/signin");
+    }
+  }, [token]);
+
   return (
     <Routes>
       <Route path="/signup" element={<Signup />} />
@@ -32,4 +44,18 @@ function PrivateRoutes() {
       </div>
     </div>
   ) : <Navigate to="/signup" />;
+};
+
+function isTokenExpired(token: string | null | undefined): boolean {
+  if (!token) {
+    return true;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp! < currentTime;
+  } catch (err) {
+    return true;
+  }
 }

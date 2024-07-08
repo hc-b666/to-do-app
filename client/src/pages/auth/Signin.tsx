@@ -16,6 +16,11 @@ const Signin = () => {
     try {
       const res = await signin(data);
 
+      // ToDo - Notify user if there is error
+      if (res.data.status === 500 || res.data.status === 400) {
+        alert("Error"); 
+      }
+
       if (res.data.status === 200) {
         localStorage.setItem("token", res.data.token);
         navigate("/dashboard");
@@ -33,6 +38,7 @@ const Signin = () => {
     }
   }, [token]);
 
+  // ToDo - Move styles to auth-styles.css
   return (
     <main className="auth-main">
       <div className="p-8 min-w-[400px] flex flex-col rounded-2xl shadow">
