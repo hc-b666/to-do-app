@@ -1,8 +1,7 @@
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../database/database');
-
-const SECRET_KEY = 'todo-app-super-secret-key';
+const { db } = require('../database/database');
 
 // 200 - OK
 // 201 - Created
@@ -34,11 +33,21 @@ exports.signup = (req, res) => {
       db.run(insertUserSql, [username, hashedPassword], function(err) {
         if (err) {
           console.error('Error with creating user:', err.message);
-          return res.status(500).json({ error: 'Error creating user', status: 500 }); // Database error
+          return res.status(500).json({ error: 'Error with creating user', status: 500 }); // Database error
         }
 
         const userId = this.lastID;
-        const token = jwt.sign({ userId, username }, SECRET_KEY, { expiresIn: '24h' });
+        const taskStatuses = '/to do/doing/done';
+        const insertTaskStatusesSql = `INSERT INTO taskStatuses (statuses, user_id) VALUES (?, ?)`;
+
+        db.run(insertTaskStatusesSql, [taskStatuses, userId], function(err) {
+          if (err) {
+            console.error('Error with creating user:', err.message);
+            return res.status(500).json({ error: 'Error with creating user', status: 500 }) // Database error
+          }
+        });
+
+        const token = jwt.sign({ userId, username }, process.env.SECRET_KEY, { expiresIn: '24h' });
 
         res.status(201).json({ token, status: 201 }); // Response
       });
@@ -71,7 +80,7 @@ exports.signin = (req, res) => {
       return res.status(400).json({ error: 'Invalid username or password', status: 400 }); // password is incorrect
     }
 
-    const token = jwt.sign({ userId: row.id, username }, SECRET_KEY, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: row.id, username }, process.env.SECRET_KEY, { expiresIn: '24h' });
 
     res.status(200).json({ token, status: 200 }); // Response
   });
