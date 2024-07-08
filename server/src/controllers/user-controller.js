@@ -5,6 +5,7 @@ const { db } = require('../database/database');
 
 // 200 - OK
 // 201 - Created
+// 304 - Same request
 // 400 - Bad Request
 // 401 - Unauthorized
 // 500 - Internal Server Error
@@ -37,7 +38,7 @@ exports.signup = (req, res) => {
         }
 
         const userId = this.lastID;
-        const taskStatuses = '/to do/doing/done';
+        const taskStatuses = '/to do/doing/done/';
         const insertTaskStatusesSql = `INSERT INTO taskStatuses (statuses, user_id) VALUES (?, ?)`;
 
         db.run(insertTaskStatusesSql, [taskStatuses, userId], function(err) {

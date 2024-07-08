@@ -19,6 +19,26 @@ exports.getStatuses = async (req, res) => {
   }
 };
 
+exports.postStatus = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { statuses } = req.body;
+
+    const statusesString = `/${statuses.join('/')}/`;
+    const updateStatusSql = `UPDATE taskStatuses SET statuses = ? WHERE user_id = ?`;
+
+    try {
+      await query(updateStatusSql, [statusesString, userId]);
+      res.status(200).json({ message: 'Statuses updated successfully', status: 200 });
+    } catch (dberr) {
+      console.error('Database error:', dberr);
+      res.status(500).json({ error: 'Database error', status: 500 });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: 'An unknown error occured', status: 500 });
+  }
+};
+
 exports.getTasks = async (req, res) => {
   try {
     const userId = req.user.userId;
