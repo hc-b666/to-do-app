@@ -22,7 +22,8 @@ function initializeDatabase() {
         description TEXT NOT NULL,
         deadline TEXT NOT NULL,
         status TEXT NOT NULL,
-        user_id INTEGER NOT NULL
+        user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id)
       );`,
       (err) => {
         if (err) {
