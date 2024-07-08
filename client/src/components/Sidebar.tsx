@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { TbLayoutSidebar, TbCalendar, TbCalendarWeek } from "react-icons/tb";
-import { useGetStatusesQuery } from "../services/tasksApi";
+import { useGetStatusesQuery, usePostTaskMutation } from "../services/tasksApi";
 import Modal from "./Modal";
 
 interface ISidebar {
@@ -14,6 +14,7 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const { data: statusesData } = useGetStatusesQuery(undefined);
+  const [postTask] = usePostTaskMutation();
 
   useEffect(() => {
     const parsedDeadline = parseTimeFromTitle(title);
@@ -22,13 +23,20 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
     }
   }, [title]);
 
-  const createTaskHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const createTaskHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
     console.log(data)
+
+    try {
+      const res = await postTask(data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
 
     event.currentTarget.reset();
   }

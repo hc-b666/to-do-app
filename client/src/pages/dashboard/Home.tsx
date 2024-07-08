@@ -1,8 +1,15 @@
+import { useGetTasksQuery } from "../../services/tasksApi";
+
 const Home = () => {
+  const { data: tasks, isLoading } = useGetTasksQuery(undefined);
+  console.log(tasks)
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div>
-      Home
+        today's tasks
     </div>
   );
 };

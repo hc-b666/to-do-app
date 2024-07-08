@@ -16,15 +16,31 @@ export const tasksApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["task"],
+  tagTypes: ["task", "status"],
   endpoints: (builder) => ({
     getStatuses: builder.query({
       query: () => ({
         url: `/getStatuses`,
         method: "GET",
       }),
+      providesTags: ["status"],
+    }),
+    getTasks: builder.query({
+      query: () => ({
+        url: "/getTasks",
+        method: "GET",
+      }),
+      providesTags: ["task"],
+    }),
+    postTask: builder.mutation({
+      query: (body) => ({
+        url: "/postTask",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["task"],
     }),
   }),
 });
 
-export const { useGetStatusesQuery } = tasksApi;
+export const { useGetStatusesQuery, useGetTasksQuery, usePostTaskMutation } = tasksApi;
