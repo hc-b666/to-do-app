@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Sidebar } from "./components/sidebar";
-import { Navbar } from "./components/Navbar";
+import { Sidebar } from "@components/sidebar";
+import { Navbar } from "@components/Navbar";
 
-import Signup from "./pages/auth/Signup";
-import Singin from "./pages/auth/Signin";
-import { Home } from "./pages/dashboard/home";
-import Upcoming from "./pages/dashboard/Upcoming";
+import Signup from "@pages/auth/Signup";
+import Singin from "@pages/auth/Signin";
+import { Home } from "@pages/dashboard/home";
+import Upcoming from "@pages/dashboard/Upcoming";
 
 export const App = () => {
   const navigate = useNavigate();

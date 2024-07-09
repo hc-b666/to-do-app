@@ -1,5 +1,5 @@
 import { DragDropContext } from "react-beautiful-dnd";
-import { useGetStatusesQuery, useGetTasksQuery, useUpdateTaskStatusMutation } from "../../../services/tasksApi";
+import { useGetStatusesQuery, useGetTasksQuery, useUpdateTaskStatusMutation } from "@services/tasksApi";
 import { StatusColumn } from "./components/StatusColumn";
 
 // ToDo - Fix bug in dnd

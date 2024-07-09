@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TbLayoutSidebar } from "react-icons/tb";
 import { MdOutlineTaskAlt } from "react-icons/md";
-import { useGetTodayTasksLengthQuery } from "../services/tasksApi";
+import { useGetTodayTasksLengthQuery } from "@services/tasksApi";
 
 interface INavbar {
   sidebarState: boolean;

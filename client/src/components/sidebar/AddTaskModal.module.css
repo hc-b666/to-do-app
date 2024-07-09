@@ -1,5 +1,5 @@
 .form {
-  @apply w-[500px] flex flex-col items-start;
+  @apply w-[550px] flex flex-col items-start;
 }
 
 .title-input {

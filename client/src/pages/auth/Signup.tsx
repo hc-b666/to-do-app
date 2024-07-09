@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useSignupMutation } from "../../services/authApi";
+import { useSignupMutation } from "@services/authApi";
 import "./auth-styles.css";
 
 const Signup = () => {

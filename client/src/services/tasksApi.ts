@@ -2,27 +2,27 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getToken = () => localStorage.getItem("token");
 
-interface StatusesData {
+export interface StatusesData {
   status: number;
   statusSegments: string[];
 }
 
-interface TasksData {
+export interface TasksData {
   status: number;
   tasks: Task[];
 }
 
-interface TodayTasksLengthData {
+export interface TodayTasksLengthData {
   status: number;
   length: number;
 }
 
-interface PostTaskData {
+export interface PostTaskData {
   message: string;
   status: number;
 }
 
-interface Task {
+export interface Task {
   id: number;
   title: string;
   description: string;
