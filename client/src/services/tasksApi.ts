@@ -12,6 +12,16 @@ interface TasksData {
   tasks: Task[];
 }
 
+interface TodayTasksLengthData {
+  status: number;
+  length: number;
+}
+
+interface PostTaskData {
+  message: string;
+  status: number;
+}
+
 interface Task {
   id: number;
   title: string;
@@ -50,7 +60,14 @@ export const tasksApi = createApi({
       }),
       providesTags: ["task"],
     }),
-    postTask: builder.mutation({
+    getTodayTasksLength: builder.query<TodayTasksLengthData, void>({
+      query: () => ({
+        url: "/getTodayTasksLength",
+        method: "GET",
+      }),
+      providesTags: ["task"],
+    }),
+    postTask: builder.mutation<PostTaskData, Partial<Task>>({
       query: (body) => ({
         url: "/postTask",
         method: "POST",
@@ -71,4 +88,4 @@ export const tasksApi = createApi({
   }),
 });
 
-export const { useGetStatusesQuery, useGetTasksQuery, usePostTaskMutation, useUpdateTaskStatusMutation } = tasksApi;
+export const { useGetStatusesQuery, useGetTasksQuery, useGetTodayTasksLengthQuery, usePostTaskMutation, useUpdateTaskStatusMutation } = tasksApi;

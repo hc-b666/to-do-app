@@ -5,3 +5,21 @@
 * {
   font-family: "Ubuntu", sans-serif; 
 }
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar {}
+.scrollbar::-webkit-scrollbar {
+  @apply w-1;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-50;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-amber-100 hover:bg-amber-300 rounded-lg cursor-pointer;
+}

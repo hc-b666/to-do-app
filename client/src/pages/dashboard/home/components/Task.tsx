@@ -22,10 +22,11 @@ export const TaskCard: FC<ITaskCard> = ({ task, index }) => {
   return (
     <Draggable draggableId={String(task.id)} index={index}>
       {(provided) => (
-        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="p-4 border rounded-lg cursor-pointer">
-          <h1>{task.title}</h1>
-          <div className="text-sm flex items-center gap-1">
-            <IoMdTime className="text-base" />
+        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={`${task.status === "done" ? "text-gray-500" : ""} p-4 bg-white border rounded-2xl shadow cursor-pointer`}>
+          <h4 className={`${task.status === "done" ? "line-through" : ""} text-sm`}>{task.title}</h4>
+          <p className={`${task.status === "done" ? "line-through" : ""} text-gray-500 text-xs`}>{task.description}</p>
+          <div className="text-xs mt-2 flex items-center gap-1">
+            <IoMdTime className="text-sm" />
             <p>{formattedTime}</p>
           </div>
         </div>

@@ -17,14 +17,18 @@ interface IStatusColumn {
 }
 
 export const StatusColumn: FC<IStatusColumn> = ({ status, tasks }) => {
+  const totalTasks = tasks?.length ? `${tasks.length} task${tasks.length > 1 ? "s" : ""}` : "";
 
   return (
-    <div className="px-5 w-[350px] h-full border-x">
-      <h1 className="text-2xl mb-5">{capitalize(status)}</h1>
+    <div className="w-[300px] h-full">
+      <div className="px-3 mb-3">
+        <h1 className="text-xl font-bold">{capitalize(status)}</h1>
+        <p className="text-sm">{totalTasks}</p>
+      </div>
 
       <Droppable droppableId={status}>
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className="h-full flex flex-col gap-3">
+        {(provided, snapshot) => (
+          <div ref={provided.innerRef} {...provided.droppableProps} className={`${snapshot.isDraggingOver ? "bg-amber-50" : "bg-white"} p-3 h-full rounded-lg flex flex-col gap-3 overflow-y-auto scrollbar`}>
             {tasks && (
               tasks.map((task, index: number) => (
                 <TaskCard task={task} index={index} key={task.id} />

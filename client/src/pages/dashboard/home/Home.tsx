@@ -10,8 +10,6 @@ export const Home = () => {
   const onDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
 
-    console.log(destination, source, draggableId)
-
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
@@ -38,7 +36,7 @@ export const Home = () => {
   };
 
   return (
-    <main className="p-10 mx-auto flex-grow flex items-start justify-center gap-20">
+    <main className="p-10 flex-grow flex items-start gap-10 overflow-hidden">
       <DragDropContext onDragEnd={onDragEnd}>
         {statusesData?.statusSegments.map((status: string, index: number) => (
           <StatusColumn status={status} tasks={tasksData?.tasks.filter((task) => task.status === status)} key={index} />

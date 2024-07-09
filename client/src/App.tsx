@@ -39,7 +39,7 @@ function PrivateRoutes() {
   const token = localStorage.getItem("token");
 
   return token ? (
-    <div className="flex">
+    <div className="h-screen flex">
       <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
       <div className="w-full flex flex-col">
         <Navbar sidebarState={sidebarState} setSidebarState={setSidebarState} />

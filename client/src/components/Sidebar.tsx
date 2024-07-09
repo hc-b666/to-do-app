@@ -16,8 +16,8 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const { data: statusesData } = useGetStatusesQuery(undefined);
-  const [postTask] = usePostTaskMutation();
-
+  const [postTask, { data }] = usePostTaskMutation();
+  console.log(data)
   useEffect(() => {
     const parsedDeadline = parseTimeFromTitle(title);
     if (parsedDeadline) {
@@ -42,7 +42,7 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
 
   return (
     <>
-      <aside className={`${sidebarState ? "p-6 w-[300px]" : "w-0"} min-h-screen flex flex-col shadow-lg duration-500`}>
+      <aside className={`${sidebarState ? "p-6 w-[300px]" : "w-0"} bg-amber-50 min-h-screen flex flex-col shadow-lg duration-500`}>
         {sidebarState && (
           <>
             <section className="mb-4 flex items-center justify-between">
