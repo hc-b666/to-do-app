@@ -6,12 +6,15 @@
   font-family: "Ubuntu", sans-serif; 
 }
 
+input, select, textarea, button {
+  @apply outline-none;
+}
+
 .scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.scrollbar {}
 .scrollbar::-webkit-scrollbar {
   @apply w-1;
 }

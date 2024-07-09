@@ -1,0 +1,19 @@
+.column {
+  @apply w-[300px] h-full;
+}
+
+.column-header {
+  @apply px-3 mb-3;
+}
+
+.column-title {
+  @apply text-xl font-bold;
+}
+
+.column-subtitle {
+  @apply text-sm;
+}
+
+.tasks-wrap {
+  @apply p-3 h-full rounded-lg flex flex-col gap-3 overflow-y-auto;
+}

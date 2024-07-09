@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { capitalize } from "../../../../lib/capitalize";
 import { TaskCard } from "./Task";
+import styles from "./StatusColumn.module.css";
 
 interface Task {
   id: number;
@@ -20,15 +21,15 @@ export const StatusColumn: FC<IStatusColumn> = ({ status, tasks }) => {
   const totalTasks = tasks?.length ? `${tasks.length} task${tasks.length > 1 ? "s" : ""}` : "";
 
   return (
-    <div className="w-[300px] h-full">
-      <div className="px-3 mb-3">
-        <h1 className="text-xl font-bold">{capitalize(status)}</h1>
-        <p className="text-sm">{totalTasks}</p>
+    <div className={styles["column"]}>
+      <div className={styles["column-header"]}>
+        <h1 className={styles["column-title"]}>{capitalize(status)}</h1>
+        <p className={styles["column-subtitle"]}>{totalTasks}</p>
       </div>
 
       <Droppable droppableId={status}>
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className={`${snapshot.isDraggingOver ? "bg-amber-50" : "bg-white"} p-3 h-full rounded-lg flex flex-col gap-3 overflow-y-auto scrollbar`}>
+          <div ref={provided.innerRef} {...provided.droppableProps} className={`${snapshot.isDraggingOver ? "bg-amber-50" : "bg-white"} ${styles["tasks-wrap"]} scrollbar`}>
             {tasks && (
               tasks.map((task, index: number) => (
                 <TaskCard task={task} index={index} key={task.id} />

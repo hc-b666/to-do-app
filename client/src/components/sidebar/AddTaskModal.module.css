@@ -1,0 +1,35 @@
+.form {
+  @apply w-[500px] flex flex-col items-start;
+}
+
+.title-input {
+  @apply text-2xl;
+}
+
+.description-input {
+  @apply text-sm;
+}
+
+.date-input {
+  @apply text-sm rounded-lg border-2 shadow cursor-pointer;
+}
+
+.status-select {
+  @apply text-sm rounded-lg border-2 shadow cursor-pointer;
+}
+
+.add-props {
+  @apply mt-3 grid grid-cols-3 gap-4;
+}
+
+.button-wrap {
+  @apply mt-3 pt-3 flex gap-3 justify-end border-t w-full;
+}
+
+.button {
+  @apply text-white text-sm font-bold py-2 px-4 bg-purple-700 hover:bg-purple-900 rounded-lg duration-300;
+}
+
+.cancel-button {
+  @apply text-black text-sm py-2 px-4 bg-gray-100 hover:bg-gray-300 rounded-lg duration-300;
+}

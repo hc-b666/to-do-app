@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Sidebar } from "./components/Sidebar";
+import { Sidebar } from "./components/sidebar";
 import { Navbar } from "./components/Navbar";
 
 import Signup from "./pages/auth/Signup";

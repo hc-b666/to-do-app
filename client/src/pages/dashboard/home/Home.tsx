@@ -2,6 +2,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useGetStatusesQuery, useGetTasksQuery, useUpdateTaskStatusMutation } from "../../../services/tasksApi";
 import { StatusColumn } from "./components/StatusColumn";
 
+// ToDo - Fix bug in dnd
 export const Home = () => {
   const { data: statusesData } = useGetStatusesQuery(undefined);
   const { data: tasksData } = useGetTasksQuery(undefined);
@@ -31,6 +32,9 @@ export const Home = () => {
 
     const newEndTasks = Array.from(endTasks);
     newEndTasks.splice(destination.index, 0, tasksData?.tasks.find((task) => task.id === draggableId));
+
+    console.log(result)
+    console.log(newEndTasks)
 
     updateTask({ id: draggableId, status: endStatus });
   };
