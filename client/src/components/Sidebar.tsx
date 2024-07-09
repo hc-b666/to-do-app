@@ -4,6 +4,8 @@ import { TbLayoutSidebar, TbCalendar, TbCalendarWeek } from "react-icons/tb";
 import { useGetStatusesQuery, usePostTaskMutation } from "../services/tasksApi";
 import Modal from "./Modal";
 
+// ToDo - Validation
+// ToDo - Reset inputs
 interface ISidebar {
   sidebarState: boolean;
   setSidebarState: (state: boolean) => void;
@@ -29,17 +31,14 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    console.log(data)
-
     try {
       const res = await postTask(data);
       console.log(res);
     } catch (error) {
       console.log(error);
     }
-
-    event.currentTarget.reset();
-  }
+    // event.currentTarget.reset();
+  };
 
   return (
     <>
@@ -129,5 +128,5 @@ const parseTimeFromTitle = (title: string) => {
     const localTime = new Date(date.getTime() - timezoneOffset);
     return localTime.toISOString().slice(0, 16);
   }
-  return '';
+  return "";
 };

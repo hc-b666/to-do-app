@@ -6,7 +6,7 @@ import { Navbar } from "./components/Navbar";
 
 import Signup from "./pages/auth/Signup";
 import Singin from "./pages/auth/Signin";
-import Home from "./pages/dashboard/Home";
+import { Home } from "./pages/dashboard/home";
 import Upcoming from "./pages/dashboard/Upcoming";
 
 export const App = () => {
@@ -17,6 +17,8 @@ export const App = () => {
     if (!token || isTokenExpired(token)) {
       localStorage.removeItem("token"); 
       navigate("/signin");
+    } else {
+      navigate("/dashboard");
     }
   }, [token]);
 

@@ -31,7 +31,7 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
             <TbLayoutSidebar className="text-gray-500 w-6 h-6" />
           </button>
         )}
-        <p>/ Navbar / {breadcrumbText}</p>
+        <p>/ {breadcrumbText}</p>
       </div>
 
       <button onClick={signoutHandler} className="text-white text-base font-semibold py-2 px-4 bg-purple-700 hover:bg-purple-500 rounded-lg duration-300">
