@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { useGetStatusesQuery, usePostTaskMutation } from "@services/tasksApi";
 import { capitalize } from "@lib/capitalize";
 import { parseTimeFromTitle } from "@lib/parseTimeFromTitle";
-import Modal from "../Modal";
+import Modal from "@components/Modal";
 import styles from "./AddTaskModal.module.css";
 
 interface IAddTaskModal {

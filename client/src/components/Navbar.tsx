@@ -2,7 +2,9 @@ import { FC } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TbLayoutSidebar } from "react-icons/tb";
 import { MdOutlineTaskAlt } from "react-icons/md";
+import { CiLogout } from "react-icons/ci";
 import { useGetTodayTasksLengthQuery } from "@services/tasksApi";
+import { Button } from "./ui/button";
 
 interface INavbar {
   sidebarState: boolean;
@@ -31,8 +33,9 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
 
   const todayTasksText = todayTaskLengthData?.length ? (
     <div className="flex items-center gap-1">
+      -
       <MdOutlineTaskAlt />
-      {`${todayTaskLengthData.length} task${todayTaskLengthData.length > 1 ? "s" : ""}`}
+      {` ${todayTaskLengthData.length} task${todayTaskLengthData.length > 1 ? "s" : ""}`}
     </div>
   ) : "";
 
@@ -44,12 +47,10 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
             <TbLayoutSidebar className="text-gray-500 w-6 h-6" />
           </button>
         )}
-        <p className="flex items-center gap-1">{breadcrumbText} - {formattedDate} - {todayTasksText}</p>
+        <p className="flex items-center gap-1">{breadcrumbText} - {formattedDate} {todayTasksText}</p>
       </div>
 
-      <button onClick={signoutHandler} className="text-white text-base font-semibold py-2 px-4 bg-purple-700 hover:bg-purple-500 rounded-lg duration-300">
-        Sign Out  
-      </button>
+      <Button onClick={signoutHandler} variant={"default"}><CiLogout className="mr-2 h-5 w-5" /> Sign Out</Button>
     </nav>
   );
 };
