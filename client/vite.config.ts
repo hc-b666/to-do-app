@@ -12,6 +12,7 @@ export default defineConfig({
       "@lib": path.resolve(__dirname, "src/lib"),
       "@services": path.resolve(__dirname, "src/services"),
       "@app": path.resolve(__dirname, "src/app"),
+      "@context": path.resolve(__dirname, "src/context"),
     },
   },
   server: {

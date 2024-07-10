@@ -1,10 +1,9 @@
 import { FC } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { TbLayoutSidebar } from "react-icons/tb";
-import { MdOutlineTaskAlt } from "react-icons/md";
-import { CiLogout } from "react-icons/ci";
+import { PanelRight, LogOut } from "lucide-react";
 import { useGetTodayTasksLengthQuery } from "@services/tasksApi";
 import { Button } from "./ui/button";
+import { ModeToggle } from "./ModeToggle";
 
 interface INavbar {
   sidebarState: boolean;
@@ -34,7 +33,6 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
   const todayTasksText = todayTaskLengthData?.length ? (
     <div className="flex items-center gap-1">
       -
-      <MdOutlineTaskAlt />
       {` ${todayTaskLengthData.length} task${todayTaskLengthData.length > 1 ? "s" : ""}`}
     </div>
   ) : "";
@@ -44,13 +42,16 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
       <div className="flex items-center gap-5">
         {!sidebarState && (
           <button onClick={() => setSidebarState(true)}>
-            <TbLayoutSidebar className="text-gray-500 w-6 h-6" />
+            <PanelRight className="text-gray-500 w-6 h-6" />
           </button>
         )}
         <p className="flex items-center gap-1">{breadcrumbText} - {formattedDate} {todayTasksText}</p>
       </div>
-
-      <Button onClick={signoutHandler} variant={"default"}><CiLogout className="mr-2 h-5 w-5" /> Sign Out</Button>
+      
+      <div className="flex items-center gap-4">
+        <ModeToggle />
+        <Button onClick={signoutHandler} variant={"default"}><LogOut className="mr-2 h-5 w-5" /> Sign Out</Button>
+      </div>
     </nav>
   );
 };

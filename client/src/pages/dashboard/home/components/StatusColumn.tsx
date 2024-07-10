@@ -29,7 +29,7 @@ export const StatusColumn: FC<IStatusColumn> = ({ status, tasks }) => {
 
       <Droppable droppableId={status}>
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className={`${snapshot.isDraggingOver ? "bg-amber-50" : "bg-white"} ${styles["tasks-wrap"]} scrollbar`}>
+          <div ref={provided.innerRef} {...provided.droppableProps} className={`${snapshot.isDraggingOver ? "bg-gray-50 dark:bg-gray-900" : "bg-white dark:bg-gray-950"} ${styles["tasks-wrap"]} scrollbar`}>
             {tasks && (
               tasks.map((task, index: number) => (
                 <TaskCard task={task} index={index} key={task.id} />
