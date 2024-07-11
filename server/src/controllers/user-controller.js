@@ -59,8 +59,6 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   const { username, password } = req.body;
 
-  console.log(username, password)
-
   if (!username || !password) {
     return res.status(400).json({ error: 'Invalid username or password', status: 400 });
   }
