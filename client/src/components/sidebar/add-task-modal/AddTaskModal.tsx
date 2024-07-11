@@ -3,7 +3,7 @@ import { useGetStatusesQuery, usePostTaskMutation } from "@services/tasksApi";
 import { capitalize } from "@lib/capitalize";
 import { parseTimeFromTitle } from "@lib/parseTimeFromTitle";
 import Modal from "@components/Modal";
-import styles from "./AddTaskModal.module.css";
+import { Button } from "@components/ui/button";
 
 interface IAddTaskModal {
   taskModal: boolean;
@@ -39,14 +39,14 @@ export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => 
 
   return (
     <Modal state={taskModal} setState={setTaskModal}>
-      <form onSubmit={createTaskHandler} className={styles["form"]}>
+      <form onSubmit={createTaskHandler} className="w-[550px] flex flex-col items-start">
 
         <input 
           name="title" 
           id="title" 
           type="text" 
           placeholder="Title" 
-          className={styles["title-input"]} 
+          className="text-2xl" 
           onChange={(e) => setTitle(e.currentTarget.value)} 
           required 
         />
@@ -56,31 +56,31 @@ export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => 
           id="description" 
           type="text" 
           placeholder="Description" 
-          className={styles["description-input"]} 
+          className="text-sm"
           required 
         />
 
-        <div className={styles["add-props"]}>
+        <div className="mt-3 grid grid-cols-3 gap-4">
           <input 
             name="deadline" 
             id="deadline" 
             type="datetime-local" 
             value={deadline} 
-            className={styles["date-input"]} 
+            className="text-sm rounded-lg border-2 shadow cursor-pointer"
             onChange={(e) => setDeadline(e.target.value)} 
             required 
           />
           
-          <select name="status" id="status" className={styles["status-select"]}>
+          <select name="status" id="status" className="text-sm rounded-lg border-2 shadow cursor-pointer">
             {statusesData?.statusSegments.map((status: string) => (
               <option value={status} key={status}>{capitalize(status)}</option>
             ))}
           </select>
         </div>
 
-        <div className={styles["button-wrap"]}>
-          <button onClick={() => setTaskModal(false)} className={styles["cancel-button"]} type="button">Cancel</button>
-          <button className={styles["button"]} type="submit">Add Task</button>
+        <div className="mt-3 pt-3 flex gap-3 justify-end border-t w-full">
+          <Button onClick={() => setTaskModal(false)} type="button">Cancel</Button>
+          <Button variant={"secondary"} type="submit">Add Task</Button>
         </div>
       </form>
     </Modal>
