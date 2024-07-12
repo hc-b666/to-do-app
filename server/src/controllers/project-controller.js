@@ -123,11 +123,18 @@ exports.postProject = async (req, res) => {
   const userId = req.user.userId;
   const { title, description, statuses, users_id } = req.body;
   
-  if (!title || !statuses) {
+  if (!title) {
     return res.status(400).json({ error: 'Bad request', status: 400 });
   }
+  let stats;
 
-  const statusesString = `/${statuses.join('/')}/`;
+  if (!statuses) {
+    stats = ['to do', 'in progress', 'done'];
+  }
+
+  console.log(req.body)
+
+  const statusesString = statuses ? `/${statuses.join('/')}/` : `/${stats.join('/')}/`;
   const users_id_string = `/${users_id.join('/')}/`;
 
   const postProjectSql = `INSERT INTO projects (title, description, statuses, users_id, owner_id) VALUES (?, ?, ?, ?, ?)`;
