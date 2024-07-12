@@ -1,21 +1,5 @@
-const { db, query } = require('../database/database');
-
-// Utility function to handle database queries
-const executeQuery = async (res, sql, params, successCallback) => {
-  try {
-    const result = await query(sql, params);
-    successCallback(result);
-  } catch (dberr) {
-    console.error('Database error:', dberr);
-    res.status(500).json({ error: 'Database error', status: 500 });
-  }
-};
-
-// Utility function to handle unknown errors
-const handleUnknownError = (res, error) => {
-  console.error('Unknown error:', error);
-  res.status(500).json({ error: 'An unknown error occurred', status: 500 });
-};
+const { db } = require('../database/database');
+const { executeQuery, handleUnknownError } = require('../utils/utility-funcs');
 
 exports.getStatuses = async (req, res) => {
   const userId = req.user.userId;
@@ -76,6 +60,10 @@ exports.getTodayTasksLength = async (req, res) => {
 exports.postTask = async (req, res) => {
   const userId = req.user.userId;
   const { title, description, deadline, status } = req.body;
+
+  if (!title || !description || !deadline || !status) {
+    return res.status(400).json({ error: 'Bad request', status: 400 });
+  }
 
   const insertTaskSql = `INSERT INTO tasks (title, description, deadline, status, user_id) VALUES (?, ?, ?, ?, ?)`;
 

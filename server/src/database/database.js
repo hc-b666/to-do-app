@@ -55,13 +55,53 @@ function initializeDatabase() {
         statuses TEXT NOT NULL,
         user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
-      );`, 
+      );`,
       (err) => {
         if (err) {
           console.error('Error creating taskStatuses table:', err.message);
           return;
         }
         console.log('taskStatuses Table created or already exists');
+      }
+    );
+
+    db.run(
+      `CREATE TABLE IF NOT EXISTS projects (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        statuses TEXT NOT NULL,
+        users_id TEXT,
+        owner_id INTEGER NOT NULL,
+        FOREIGN KEY (owner_id) REFERENCES users(id)
+      );`,
+      (err) => {
+        if (err) {
+          console.error('Error creating projects table:', err.message);
+          return;
+        }
+        console.log('projects Table created or already exists');
+      }
+    );
+
+    db.run(
+      `CREATE TABLE IF NOT EXISTS projectsTasks (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT NOT NULL,
+          description TEXT,
+          status TEXT NOT NULL,
+          deadline TEXT NOT NULL,
+          user_id INTEGER NOT NULL,
+          project_id INTEGER NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (project_id) REFERENCES projects(id)
+        );`,
+      (err) => {
+        if (err) {
+          console.error('Error creating projectsTasks table:', err.message);
+          return;
+        }
+        console.log('projectsTasks Table created or already exists');
       }
     );
   });
@@ -77,6 +117,6 @@ function query(sql, params) {
       }
     });
   });
-};
+}
 
 module.exports = { db, query };
