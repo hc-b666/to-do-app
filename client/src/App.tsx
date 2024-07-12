@@ -3,6 +3,7 @@ import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Sidebar } from "@components/sidebar";
 import { Navbar } from "@components/Navbar";
+import { Toaster } from "@components/ui/toaster";
 
 import Signup from "@pages/auth/Signup";
 import Singin from "@pages/auth/Signin";
@@ -23,14 +24,17 @@ export const App = () => {
   }, [token]);
 
   return (
-    <Routes>
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<Singin />} />
-      <Route path="/dashboard" element={<PrivateRoutes />}>
-        <Route path="" element={<Home />} />
-        <Route path="upcoming" element={<Upcoming />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Singin />} />
+        <Route path="/dashboard" element={<PrivateRoutes />}>
+          <Route path="" element={<Home />} />
+          <Route path="upcoming" element={<Upcoming />} />
+        </Route>
+      </Routes>
+      <Toaster />
+    </>
   );
 };
 

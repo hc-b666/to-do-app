@@ -4,6 +4,7 @@ import { PanelRight, LogOut } from "lucide-react";
 import { useGetTodayTasksLengthQuery } from "@services/tasksApi";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
+import { capitalize } from "@lib/capitalize";
 
 interface INavbar {
   sidebarState: boolean;
@@ -22,7 +23,7 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
   const pathSegments = pathname.split("/").filter(Boolean);
 
   if (pathSegments.length > 1 && pathSegments[0] === "dashboard") {
-    breadcrumbText = pathSegments[1].charAt(0).toUpperCase() + pathSegments[1].slice(1);
+    breadcrumbText = capitalize(pathSegments[1]);
   }
 
   const signoutHandler = () => {

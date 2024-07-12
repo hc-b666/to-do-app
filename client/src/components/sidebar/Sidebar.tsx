@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 import { AddTaskModal } from "./add-task-modal";
 import { Calendar, PanelRight } from "lucide-react";
 import { Button } from "@components/ui/button";
+import { AddProjectModal } from "./add-project-modal";
+import { useGetProjectsQuery } from "@services/projectsApi";
+import { capitalize } from "@lib/capitalize";
 
 interface ISidebar {
   sidebarState: boolean;
@@ -11,6 +14,8 @@ interface ISidebar {
 
 export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   const [taskModal, setTaskModal] = useState(false);
+  const [projectModal, setProjectModal] = useState(false);
+  const { data: projectsData } = useGetProjectsQuery(undefined);
   
   return (
     <>
@@ -37,11 +42,17 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
             <Button onClick={() => setTaskModal(true)} variant={"default"} className="w-full">+ Add Task</Button>
 
             <h5 className="text-gray-700 text-sm font-normal">Projects</h5>
-            <Button variant={"default"} className="w-full">+ Create Project</Button>
+            {projectsData?.projects && projectsData.projects.map((project) => (
+              <NavLink to={`/dashboard/project/${project.id}`} key={project.id} className="text-muted-foreground hover:text-gray-700 py-2 w-full flex items-center gap-3 cursor-pointer duration-300">
+                <p>{capitalize(project.title)}</p>
+              </NavLink>
+            ))}
+            <Button onClick={() => setProjectModal(true)} variant={"default"} className="w-full">+ Create Project</Button>
           </section>          
         </div>
       </aside>
       {taskModal && <AddTaskModal taskModal={taskModal} setTaskModal={setTaskModal} />}
+      {projectModal && <AddProjectModal projectModal={projectModal} setProjectModal={setProjectModal} />}
     </>
   );
 }

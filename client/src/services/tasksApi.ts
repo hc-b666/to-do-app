@@ -17,11 +17,6 @@ export interface TodayTasksLengthData {
   length: number;
 }
 
-export interface PostTaskData {
-  message: string;
-  status: number;
-}
-
 export interface Task {
   id: number;
   title: string;
@@ -67,7 +62,7 @@ export const tasksApi = createApi({
       }),
       providesTags: ["task"],
     }),
-    postTask: builder.mutation<PostTaskData, Partial<Task>>({
+    postTask: builder.mutation<unknown, Partial<Task>>({
       query: (body) => ({
         url: "/postTask",
         method: "POST",
@@ -76,16 +71,22 @@ export const tasksApi = createApi({
       invalidatesTags: ["task"],
     }),
     updateTaskStatus: builder.mutation({
-      query: ({ id, status }: { id: number, status: string }) => {
+      query: ({ id, status }: { id: number; status: string }) => {
         return {
           url: `/updateTaskStatus/${id}`,
           method: "PUT",
           body: { status },
-        }
+        };
       },
       invalidatesTags: ["task"],
     }),
   }),
 });
 
-export const { useGetStatusesQuery, useGetTasksQuery, useGetTodayTasksLengthQuery, usePostTaskMutation, useUpdateTaskStatusMutation } = tasksApi;
+export const {
+  useGetStatusesQuery,
+  useGetTasksQuery,
+  useGetTodayTasksLengthQuery,
+  usePostTaskMutation,
+  useUpdateTaskStatusMutation,
+} = tasksApi;
