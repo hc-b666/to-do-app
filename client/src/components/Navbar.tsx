@@ -17,8 +17,8 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
   const { data: todayTaskLengthData } = useGetTodayTasksLengthQuery(undefined);
 
   const todayDate = new Date();
-  const formattedDate = `${todayDate.getDate()} ${todayDate.toLocaleString('en-US', { month: 'short' })}`;
-  
+  const formattedDate = `${todayDate.getDate()} ${todayDate.toLocaleString("en-US", { month: "short" })}`;
+
   let breadcrumbText = "Today";
   const pathSegments = pathname.split("/").filter(Boolean);
 
@@ -36,22 +36,28 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
       -
       {` ${todayTaskLengthData.length} task${todayTaskLengthData.length > 1 ? "s" : ""}`}
     </div>
-  ) : "";
+  ) : (
+    ""
+  );
 
   return (
-    <nav className="py-3 px-5 w-full flex items-center justify-between shadow">
+    <nav className="flex w-full items-center justify-between px-5 py-3 shadow">
       <div className="flex items-center gap-5">
         {!sidebarState && (
           <button onClick={() => setSidebarState(true)}>
-            <PanelRight className="text-gray-500 w-6 h-6" />
+            <PanelRight className="h-6 w-6 text-gray-500" />
           </button>
         )}
-        <p className="flex items-center gap-1">{breadcrumbText} - {formattedDate} {todayTasksText}</p>
+        <p className="flex items-center gap-1">
+          {breadcrumbText} - {formattedDate} {todayTasksText}
+        </p>
       </div>
-      
+
       <div className="flex items-center gap-4">
         <ModeToggle />
-        <Button onClick={signoutHandler} variant={"default"}><LogOut className="mr-2 h-5 w-5" /> Sign Out</Button>
+        <Button onClick={signoutHandler} variant={"default"}>
+          <LogOut className="mr-2 h-5 w-5" /> Sign Out
+        </Button>
       </div>
     </nav>
   );

@@ -18,14 +18,16 @@ export const AddProjectModal: FC<IAddProjectModal> = ({
   const [usePostProject] = usePostProjectMutation();
   const { toast } = useToast();
 
-  const createProjectHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const createProjectHandler = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await usePostProject({ ...data, statuses: [], users_id: []  });
+      const res = await usePostProject({ ...data, statuses: [], users_id: [] });
 
       console.log(res);
 
@@ -47,29 +49,36 @@ export const AddProjectModal: FC<IAddProjectModal> = ({
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
     <Modal state={projectModal} setState={setProjectModal}>
-      <form onSubmit={createProjectHandler} className="w-[550px] flex flex-col items-start gap-4 bg-white dark:bg-black">
-        <div className="w-full flex flex-col gap-2">
+      <form
+        onSubmit={createProjectHandler}
+        className="flex w-[550px] flex-col items-start gap-4 bg-white dark:bg-black"
+      >
+        <div className="flex w-full flex-col gap-2">
           <Label htmlFor="title">Title</Label>
           <Input name="title" type="title" id="title" placeholder="Title" />
         </div>
-        <div className="w-full flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2">
           <Label htmlFor="description">Description</Label>
-          <Input name="description" type="description" id="description" placeholder="Description" />
+          <Input
+            name="description"
+            type="description"
+            id="description"
+            placeholder="Description"
+          />
         </div>
-        statuses not yet finished todo
-        user search and add todo
-
-
-        <div className="mt-3 pt-3 flex gap-3 justify-end border-t w-full">
-          <Button onClick={() => setProjectModal(false)} type="button">Cancel</Button>
-          <Button variant={"secondary"} type="submit">Create Project</Button>
+        statuses not yet finished todo user search and add todo
+        <div className="mt-3 flex w-full justify-end gap-3 border-t pt-3">
+          <Button onClick={() => setProjectModal(false)} type="button">
+            Cancel
+          </Button>
+          <Button variant={"secondary"} type="submit">
+            Create Project
+          </Button>
         </div>
-
       </form>
     </Modal>
   );

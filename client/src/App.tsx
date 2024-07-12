@@ -16,7 +16,7 @@ export const App = () => {
 
   useEffect(() => {
     if (!token || isTokenExpired(token)) {
-      localStorage.removeItem("token"); 
+      localStorage.removeItem("token");
       navigate("/signin");
     } else {
       navigate("/dashboard");
@@ -39,19 +39,21 @@ export const App = () => {
 };
 
 function PrivateRoutes() {
-  const [sidebarState, setSidebarState] = useState(true); 
+  const [sidebarState, setSidebarState] = useState(true);
   const token = localStorage.getItem("token");
 
   return token ? (
-    <div className="h-screen flex">
+    <div className="flex h-screen">
       <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
-      <div className="w-full flex flex-col">
+      <div className="flex w-full flex-col">
         <Navbar sidebarState={sidebarState} setSidebarState={setSidebarState} />
         <Outlet />
       </div>
     </div>
-  ) : <Navigate to="/signup" />;
-};
+  ) : (
+    <Navigate to="/signup" />
+  );
+}
 
 function isTokenExpired(token: string | null | undefined): boolean {
   if (!token) {

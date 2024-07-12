@@ -19,7 +19,10 @@ interface IAddTaskModal {
   setTaskModal: (state: boolean) => void;
 }
 
-export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => {
+export const AddTaskModal: FC<IAddTaskModal> = ({
+  taskModal,
+  setTaskModal,
+}) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const { data: statusesData } = useGetStatusesQuery(undefined);
@@ -49,7 +52,7 @@ export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => 
         });
         return;
       }
-      
+
       if (res.data) {
         toast({
           title: "Task created successfully",
@@ -57,43 +60,44 @@ export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => 
         });
         setTaskModal(false);
       }
-  
     } catch (error) {
-      console.log(error);      
+      console.log(error);
     }
   };
 
   return (
     <Modal state={taskModal} setState={setTaskModal}>
-      <form onSubmit={createTaskHandler} className="w-[550px] flex flex-col items-start bg-white dark:bg-black">
-
-        <input 
-          name="title" 
-          id="title" 
-          type="text" 
-          placeholder="Title" 
-          className="text-2xl bg-transparent w-full" 
-          onChange={(e) => setTitle(e.currentTarget.value)} 
+      <form
+        onSubmit={createTaskHandler}
+        className="flex w-[550px] flex-col items-start bg-white dark:bg-black"
+      >
+        <input
+          name="title"
+          id="title"
+          type="text"
+          placeholder="Title"
+          className="w-full bg-transparent text-2xl"
+          onChange={(e) => setTitle(e.currentTarget.value)}
         />
-        
-        <input 
-          name="description" 
-          id="description" 
-          type="text" 
-          placeholder="Description" 
-          className="text-sm bg-transparent w-full"
+
+        <input
+          name="description"
+          id="description"
+          type="text"
+          placeholder="Description"
+          className="w-full bg-transparent text-sm"
         />
 
         <div className="mt-3 grid grid-cols-3 gap-4">
-          <input 
-            name="deadline" 
-            id="deadline" 
-            type="datetime-local" 
-            value={deadline} 
-            className="text-sm rounded-lg border-2 shadow cursor-pointer"
-            onChange={(e) => setDeadline(e.target.value)} 
+          <input
+            name="deadline"
+            id="deadline"
+            type="datetime-local"
+            value={deadline}
+            className="cursor-pointer rounded-lg border-2 text-sm shadow"
+            onChange={(e) => setDeadline(e.target.value)}
           />
-          
+
           <Select name="status" defaultValue={statusesData?.statusSegments[0]}>
             <SelectTrigger>
               <SelectValue placeholder="Select a status" />
@@ -101,18 +105,24 @@ export const AddTaskModal: FC<IAddTaskModal> = ({ taskModal, setTaskModal }) => 
             <SelectContent>
               <SelectGroup>
                 {statusesData?.statusSegments.map((status: string) => (
-                  <SelectItem value={status} key={status}>{capitalize(status)}</SelectItem>
+                  <SelectItem value={status} key={status}>
+                    {capitalize(status)}
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
 
-        <div className="mt-3 pt-3 flex gap-3 justify-end border-t w-full">
-          <Button onClick={() => setTaskModal(false)} type="button">Cancel</Button>
-          <Button variant={"secondary"} type="submit">Add Task</Button>
+        <div className="mt-3 flex w-full justify-end gap-3 border-t pt-3">
+          <Button onClick={() => setTaskModal(false)} type="button">
+            Cancel
+          </Button>
+          <Button variant={"secondary"} type="submit">
+            Add Task
+          </Button>
         </div>
       </form>
     </Modal>
   );
-}
+};
