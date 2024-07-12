@@ -143,7 +143,7 @@ exports.postProject = async (req, res) => {
 
 exports.searchUsersId = async (req, res) => {
   const userId = req.user.userId;
-  const { search } = req.body;
+  const { search } = req.params;
 
   if (!search) {
     return res.status(400).json({ error: 'Bad request', status: 400 });
