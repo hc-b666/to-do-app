@@ -1,8 +1,7 @@
-const { db, query } = require('../database/database');
+const { query } = require('../database/database');
 const { executeQuery, handleUnknownError } = require('../utils/utility-funcs');
 
 exports.getTasks = async (req, res) => {
-  const userId = req.user.userId;
   const projectId = req.params.projectId;
 
   if (!projectId) {
@@ -20,7 +19,6 @@ exports.getTasks = async (req, res) => {
 };
 
 exports.postProjectTask = async (req, res) => {
-  const userId = req.user.userId;
   const projectId = req.params.projectId;
   
   if (!projectId) {
@@ -45,7 +43,6 @@ exports.postProjectTask = async (req, res) => {
 };
 
 exports.editProjectTask = async (req, res) => {
-  const userId = req.user.userId;
   const taskId = req.params.taskId;
   const { title, description, status, deadline, user_id } = req.body;
 
@@ -69,7 +66,6 @@ exports.editProjectTask = async (req, res) => {
 };
 
 exports.deleteProjectTask = async (req, res) => {
-  const userId = req.user.userId;
   const taskId = req.params.taskId;
 
   if (!taskId) {
@@ -98,8 +94,14 @@ exports.getProject = async (req, res) => {
   const getProjectSql = `SELECT * FROM projects WHERE id = ? AND owner_id = ?`;
 
   try {
-    const project = await query(getProjectSql, [projectId, userId]);
-    res.status(200).json({ project, status: 200 });
+    const projects = await query(getProjectSql, [projectId, userId]);
+    const project = projects[0];
+    const statuses = project.statuses.split('/').filter(Boolean);
+    const users_id = project.users_id.split('/').filter(Boolean);
+    
+    const resProject = { id: project.id, title: project.title, description: project.description, owner_id: project.owner_id, statuses, users_id };
+
+    res.status(200).json({ project: resProject, status: 200 });
   } catch (error) {
     handleUnknownError(res, error);
   }
@@ -107,7 +109,7 @@ exports.getProject = async (req, res) => {
 
 exports.getProjects = async (req, res) => {
   const userId = req.user.userId;
-  const getProjectsSql = `SELECT * FROM projects WHERE owner_id = ?`;
+  const getProjectsSql = `SELECT id, title FROM projects WHERE owner_id = ?`;
 
   try {
     const projects = await query(getProjectsSql, [userId]);
@@ -131,8 +133,6 @@ exports.postProject = async (req, res) => {
   if (!statuses) {
     stats = ['to do', 'in progress', 'done'];
   }
-
-  console.log(req.body)
 
   const statusesString = statuses ? `/${statuses.join('/')}/` : `/${stats.join('/')}/`;
   const users_id_string = `/${users_id.join('/')}/`;

@@ -13,7 +13,7 @@ router.delete('/deleteProjectTask/:taskId', authMiddleware, projectController.de
 router.get('/getProject/:projectId', authMiddleware, projectController.getProject);
 router.get('/getProjects', authMiddleware, projectController.getProjects);
 router.post('/postProject', authMiddleware, projectController.postProject);
-router.get('/searchUsersId/:search', authMiddleware, projectController.searchUsersId);
+router.post('/searchUsersId/:search', authMiddleware, projectController.searchUsersId);
 router.post('/addUserToProject/:projectId', authMiddleware, projectController.addUserToProject);
 router.put('/editProject/:projectId', authMiddleware, projectController.editProject);
 router.delete('/deleteProject/:projectId', authMiddleware, projectController.deleteProject);

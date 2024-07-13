@@ -1,9 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const userRoutes = require('./routes/user-routes');
-const taskRoutes = require('./routes/task-routes');
-const projectRoutes = require('./routes/project-routes');
+const { userRoutes, taskRoutes, projectRoutes } = require('./routes');
 
 const app = express();
 const PORT = 3000;
