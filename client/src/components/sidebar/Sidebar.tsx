@@ -22,7 +22,7 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   return (
     <>
       <aside
-        className={`${sidebarState ? "w-[350px]" : "w-0 opacity-0"} flex min-h-screen flex-col shadow-lg transition-all duration-500 ease-in-out`}
+        className={`${sidebarState ? "w-[350px]" : "w-0 opacity-0"} flex min-h-screen flex-col shadow-lg transition-all dark:shadow-none dark:border-r dark:border-gray-800 duration-500 ease-in-out dark:bg-black`}
       >
         <div
           className={`flex h-full flex-col p-6 ${sidebarState ? "opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-500 ease-in-out`}
@@ -37,14 +37,14 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
           <section className="flex flex-col items-start gap-2">
             <NavLink
               to={"/dashboard"}
-              className={`${isActive("/dashboard") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
+              className={`${isActive("/dashboard") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50 dark:bg-gray-900 dark:text-white"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
             >
               Today
             </NavLink>
 
             <NavLink
               to={"/dashboard/upcoming"}
-              className={`${isActive("/dashboard/upcoming") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
+              className={`${isActive("/dashboard/upcoming") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50 dark:bg-gray-900 dark:text-white"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
             >
               Upcoming
             </NavLink>
@@ -57,13 +57,13 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
               + Add Task
             </Button>
 
-            <h5 className="text-sm font-bold text-black">My Projects</h5>
+            <h5 className="text-sm font-bold text-black dark:text-white">My Projects</h5>
             {projectsData?.projects &&
-              projectsData.projects.map((project) => (
+              projectsData.projects.map((project: { id: number; title: string }) => (
                 <NavLink
                   to={`/dashboard/projects/${project.id}`}
                   key={project.id}
-                  className={`${isActive(`/dashboard/projects/${project.id}`) ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
+                  className={`${isActive(`/dashboard/projects/${project.id}`) ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50 dark:bg-gray-900 dark:text-white"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
                 >
                   {capitalize(project.title)}
                 </NavLink>

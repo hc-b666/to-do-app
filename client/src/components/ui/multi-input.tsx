@@ -1,5 +1,6 @@
 import { useState, KeyboardEvent } from "react";
 import { Input } from "./input";
+import { X } from "lucide-react";
 
 interface MultiInputProps {
   name: string;
@@ -58,7 +59,7 @@ const Badge = ({ value, onDelete }: { value: string; onDelete: () => void }) => 
   return (
     <div className="flex items-center m-1 p-1 bg-gray-200 rounded">
       <div className="mr-2">{value}</div>
-      <button onClick={onDelete} className="text-red-500" type="button">x</button>
+      <button onClick={onDelete} className="text-red-500" type="button"><X className="text-black" /></button>
     </div>
   );
 };

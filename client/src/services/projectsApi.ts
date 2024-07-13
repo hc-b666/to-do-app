@@ -84,12 +84,12 @@ export const projectsApi = createApi({
       }),
       invalidatesTags: ["project"],
     }),
-    searchUsersId: builder.query({
+    searchUsersId: builder.mutation({
       query: (search) => ({
-        url: `/searchUserId/${search}`,
-        method: "GET",
+        url: `/searchUsersId/${search}`,
+        method: "POST",
       }),
-      providesTags: ["project"],
+      invalidatesTags: ["project"],
     }),
     addUserToProject: builder.mutation({
       query: ({ userId, projectId }) => ({
@@ -112,6 +112,6 @@ export const {
   usePostProjectMutation,
   useEditProjectMutation,
   useDeleteProjectMutation,
-  useSearchUsersIdQuery,
+  useSearchUsersIdMutation,
   useAddUserToProjectMutation,
 } = projectsApi;

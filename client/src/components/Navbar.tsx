@@ -41,7 +41,7 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
   );
 
   return (
-    <nav className="flex w-full items-center justify-between px-5 py-3 shadow">
+    <nav className="flex w-full items-center justify-between bg-white px-5 py-3 shadow dark:bg-black dark:shadow-none dark:border-b dark:border-gray-800">
       <div className="flex items-center gap-5">
         {!sidebarState && (
           <button onClick={() => setSidebarState(true)}>
