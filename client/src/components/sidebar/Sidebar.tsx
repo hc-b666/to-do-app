@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AddTaskModal } from "./add-task-modal";
-import { Calendar, PanelRight } from "lucide-react";
-import { Button } from "@components/ui/button";
+import { PanelRight } from "lucide-react";
+import { Button } from "@components/ui";
 import { AddProjectModal } from "./add-project-modal";
 import { useGetProjectsQuery } from "@services/projectsApi";
 import { capitalize } from "@lib/capitalize";
@@ -16,6 +16,8 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   const [taskModal, setTaskModal] = useState(false);
   const [projectModal, setProjectModal] = useState(false);
   const { data: projectsData } = useGetProjectsQuery(undefined);
+
+  const isActive = (pathname: string) => location.pathname === pathname;
 
   return (
     <>
@@ -35,42 +37,40 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
           <section className="flex flex-col items-start gap-2">
             <NavLink
               to={"/dashboard"}
-              className="flex w-full cursor-pointer items-center gap-3 py-2 text-muted-foreground duration-300 hover:text-gray-700"
+              className={`${isActive("/dashboard") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
             >
-              <Calendar className="h-6 w-6" />
-              <p>Today</p>
+              Today
             </NavLink>
 
             <NavLink
               to={"/dashboard/upcoming"}
-              className="flex w-full cursor-pointer items-center gap-3 py-2 text-muted-foreground duration-300 hover:text-gray-700"
+              className={`${isActive("/dashboard/upcoming") ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
             >
-              <Calendar className="h-6 w-6" />
-              <p>Upcoming</p>
+              Upcoming
             </NavLink>
 
             <Button
               onClick={() => setTaskModal(true)}
-              variant={"default"}
+              variant={"secondary"}
               className="w-full"
             >
               + Add Task
             </Button>
 
-            <h5 className="text-sm font-normal text-gray-700">Projects</h5>
+            <h5 className="text-sm font-bold text-black">My Projects</h5>
             {projectsData?.projects &&
               projectsData.projects.map((project) => (
                 <NavLink
-                  to={`/dashboard/project/${project.id}`}
+                  to={`/dashboard/projects/${project.id}`}
                   key={project.id}
-                  className="flex w-full cursor-pointer items-center gap-3 py-2 text-muted-foreground duration-300 hover:text-gray-700"
+                  className={`${isActive(`/dashboard/projects/${project.id}`) ? "bg-purple-700 font-bold text-white hover:bg-purple-500" : "bg-white font-normal text-black hover:bg-gray-50"} flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 duration-300`}
                 >
-                  <p>{capitalize(project.title)}</p>
+                  {capitalize(project.title)}
                 </NavLink>
               ))}
             <Button
               onClick={() => setProjectModal(true)}
-              variant={"default"}
+              variant={"secondary"}
               className="w-full"
             >
               + Create Project

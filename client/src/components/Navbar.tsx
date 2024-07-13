@@ -55,7 +55,7 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
 
       <div className="flex items-center gap-4">
         <ModeToggle />
-        <Button onClick={signoutHandler} variant={"default"}>
+        <Button onClick={signoutHandler} variant={"secondary"}>
           <LogOut className="mr-2 h-5 w-5" /> Sign Out
         </Button>
       </div>

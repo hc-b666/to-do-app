@@ -9,6 +9,7 @@ import Signup from "@pages/auth/Signup";
 import Singin from "@pages/auth/Signin";
 import { Home } from "@pages/dashboard/home";
 import Upcoming from "@pages/dashboard/Upcoming";
+import { Project } from "@pages/dashboard/project";
 
 export const App = () => {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export const App = () => {
         <Route path="/dashboard" element={<PrivateRoutes />}>
           <Route path="" element={<Home />} />
           <Route path="upcoming" element={<Upcoming />} />
+          <Route path="projects/:projectId" element={<Project />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
       </Routes>
       <Toaster />
