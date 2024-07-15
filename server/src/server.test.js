@@ -2,11 +2,15 @@ const request = require('supertest');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const { userRoutes, taskRoutes, projectRoutes } = require('../routes');
+const userRoutes = require('./routes/user-routes');
+const taskRoutes = require('./routes/task-routes');
+const projectRoutes = require('./routes/project-routes');
+
 const app = express();
+const PORT = 3000;
 const allowedOrigins = ['http://localhost:6969', 'http://localhost:5173'];
 
-app.use(cors({ 
+app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
@@ -29,11 +33,4 @@ describe('Express Server', () => {
     const res = await request(app).get('/api/users');
     expect(res.statusCode).toBe(200);
   });
-
 });
-
-module.exports = app;
-
-
-
-

@@ -1,40 +1,44 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { z } = require('zod');
 const { db } = require('../database/database');
 
-// 200 - OK
-// 201 - Created
-// 304 - Same request
-// 400 - Bad Request
-// 401 - Unauthorized
-// 500 - Internal Server Error
+const signupSchema = z.object({
+  username: z.string().min(3).max(12),
+  password: z.string().min(3).max(12),
+});
 
 exports.signup = (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+  const validateRequest = signupSchema.safeParse({ username, password });
+  
+  if (!validateRequest.success) {
+    return res.status(400).json({ error: 'Invalid username or password' });
   }
+
+  const validatedUsername = validateRequest.data.username;
+  const validatedPassword = validateRequest.data.password;
 
   const checkUserSql = `SELECT * FROM users WHERE username = ?`;
 
-  db.get(checkUserSql, [username], (err, row) => {
+  db.get(checkUserSql, [validatedUsername], (err, row) => {
     if (err) {
       console.error('Database error:', err.message);
-      return res.status(500).json({ error: 'Error checking username', status: 500 });
+      return res.status(500).json({ error: 'Error checking username' });
     }
 
     if (row) {
-      return res.status(400).json({ error: 'Username already exists', status: 400 });
+      return res.status(400).json({ error: 'Username already exists' });
     } else {
-      const hashedPassword = bcrypt.hashSync(password, 10);
+      const hashedPassword = bcrypt.hashSync(validatedPassword, 10);
       const insertUserSql = `INSERT INTO users (username, password) VALUES (?, ?)`;
 
-      db.run(insertUserSql, [username, hashedPassword], function(err) {
+      db.run(insertUserSql, [validatedUsername, hashedPassword], function(err) {
         if (err) {
           console.error('Error with creating user:', err.message);
-          return res.status(500).json({ error: 'Error with creating user', status: 500 });
+          return res.status(500).json({ error: 'Error with creating user' });
         }
 
         const userId = this.lastID;
@@ -44,11 +48,11 @@ exports.signup = (req, res) => {
         db.run(insertTaskStatusesSql, [taskStatuses, userId], function(err) {
           if (err) {
             console.error('Error with creating user:', err.message);
-            return res.status(500).json({ error: 'Error with creating user', status: 500 });
+            return res.status(500).json({ error: 'Error with creating user' });
           }
         });
 
-        const token = jwt.sign({ userId, username }, process.env.SECRET_KEY, { expiresIn: '24h' });
+        const token = jwt.sign({ userId, validatedUsername }, process.env.SECRET_KEY, { expiresIn: '24h' });
 
         res.status(201).json({ token, status: 201 });
       });
@@ -56,32 +60,42 @@ exports.signup = (req, res) => {
   });
 };
 
+const signinSchema = z.object({
+  username: z.string().min(3).max(12),
+  password: z.string().min(3).max(12),
+});
+
 exports.signin = (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+  const validateRequest = signinSchema.safeParse({ username, password });
+
+  if (!validateRequest.success) {
+    return res.status(400).json({ error: 'Invalid username or password' });
   }
+
+  const validatedUsername = validateRequest.data.username;
+  const validatedPassword = validateRequest.data.password;
 
   const getUserSql = `SELECT * FROM users WHERE username = ?`;
 
-  db.get(getUserSql, [username], (err, row) => {
+  db.get(getUserSql, [validatedUsername], (err, row) => {
     if (err) {
       console.error('Database error:', err.message);
-      return res.status(500).json({ error: 'Error checking username', status: 500 });
+      return res.status(500).json({ error: 'Error checking username' });
     }
 
     if (!row) {
-      return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+      return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    const isValidPassword = bcrypt.compareSync(password, row.password);
+    const isValidPassword = bcrypt.compareSync(validatedPassword, row.password);
 
     if (!isValidPassword) {
-      return res.status(400).json({ error: 'Invalid username or password', status: 400 });
+      return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    const token = jwt.sign({ userId: row.id, username }, process.env.SECRET_KEY, { expiresIn: '24h' });
+    const token = jwt.sign({ userId: row.id, validatedUsername }, process.env.SECRET_KEY, { expiresIn: '24h' });
 
     res.status(200).json({ token, status: 200 });
   });
