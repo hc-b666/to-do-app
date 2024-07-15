@@ -3,7 +3,8 @@ import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Sidebar } from "@components/sidebar";
 import { Navbar } from "@components/Navbar";
-import { Toaster } from "@components/ui/toaster";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Signup from "@pages/auth/Signup";
 import Singin from "@pages/auth/Signin";
@@ -36,7 +37,7 @@ export const App = () => {
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
       </Routes>
-      <Toaster />
+      <ToastContainer />
     </>
   );
 };

@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useSignupMutation } from "@services/authApi";
-import "./auth-styles.css";
+import { signupSchema } from "../../schemas/register.schema";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -14,14 +15,33 @@ const Signup = () => {
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await signup(data);
-      
-      if (res.data.status === 201) {
-        localStorage.setItem("token", res.data.token);
-        navigate("/dashboard");
+      const validatedData = signupSchema.safeParse({
+        username: data.username,
+        password: data.password,
+      });
+
+      if (validatedData.success === true) {
+        const res = await signup({
+          username: validatedData.data.username,
+          password: validatedData.data.password,
+        }).unwrap();
+
+        if (res.status === 201) {
+          localStorage.setItem("token", res.token);
+          navigate("/dashboard");
+        }
+      } else if (validatedData.success === false) {
+        toast.error(validatedData.error.errors[0].message);
       }
     } catch (error) {
       console.error(error);
+      const typedError = error as { status?: number; data?: { error: string } };
+
+      if (typedError.status === 500) {
+        if (typedError.data && typedError.data.error) {
+          toast.error(typedError.data.error);
+        }
+      }
     }
   };
 
@@ -34,29 +54,56 @@ const Signup = () => {
   }, [token]);
 
   return (
-    <main className="auth-main">
-      <div className="p-8 min-w-[400px] flex flex-col rounded-2xl shadow">
-        <h2 className="text-2xl mb-8">Sign Up Form</h2>
+    <main className="flex h-screen w-full items-center justify-center">
+      <div className="flex min-w-[400px] flex-col rounded-2xl p-8 shadow">
+        <h2 className="mb-8 text-2xl">Sign Up Form</h2>
 
         <form onSubmit={signupHandler} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <label htmlFor="username" className="text-gray-500 text-xs font-semibold">Username</label>
-            <input name="username" id="username" type="text" placeholder="Username" className="py-1 px-4 w-full border rounded-lg" />
+            <label
+              htmlFor="username"
+              className="text-xs font-semibold text-gray-500"
+            >
+              Username
+            </label>
+            <input
+              name="username"
+              id="username"
+              type="text"
+              placeholder="Username"
+              className="w-full rounded-lg border px-4 py-1"
+            />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-gray-500 text-xs font-semibold">Password</label>
-            <input name="password" id="password" type="password" placeholder="Password" className="py-1 px-4 w-full border rounded-lg" />
+            <label
+              htmlFor="password"
+              className="text-xs font-semibold text-gray-500"
+            >
+              Password
+            </label>
+            <input
+              name="password"
+              id="password"
+              type="password"
+              placeholder="Password"
+              className="w-full rounded-lg border px-4 py-1"
+            />
           </div>
 
-          <p className='text-gray-500 text-xs font-normal'>
-            Already have an account? 
-            &nbsp;
-            <Link to={"/signin"} className="font-medium underline">Sign In</Link>
+          <p className="text-xs font-normal text-gray-500">
+            Already have an account? &nbsp;
+            <Link to={"/signin"} className="font-medium underline">
+              Sign In
+            </Link>
           </p>
 
-          <button type="submit" className="text-white text-base font-semibold py-2 px-4 w-full bg-purple-700 hover:bg-purple-500 rounded-lg duration-300">Sign Up</button>
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-purple-700 px-4 py-2 text-base font-semibold text-white duration-300 hover:bg-purple-500"
+          >
+            Sign Up
+          </button>
         </form>
-
       </div>
     </main>
   );
