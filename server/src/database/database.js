@@ -21,7 +21,7 @@ function initializeDatabase() {
         title TEXT NOT NULL,
         description TEXT NOT NULL,
         deadline TEXT NOT NULL,
-        status TEXT NOT NULL,
+        status INTEGER NOT NULL,
         user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id)
       );`,

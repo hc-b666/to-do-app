@@ -11,6 +11,7 @@ const taskController = require('../controllers/task-controller');
 router.get('/getStatuses', authMiddleware, taskController.getStatuses);
 router.post('/postStatus', authMiddleware, taskController.postStatus);
 router.get('/getTasks', authMiddleware, taskController.getTasks);
+router.get('/getUpcomingTasks', authMiddleware, taskController.getUpcomingTasks);
 router.get('/getTodayTasksLength', authMiddleware, taskController.getTodayTasksLength);
 router.post('/postTask', authMiddleware, taskController.postTask);
 router.put('/updateTaskStatus/:taskId', authMiddleware, taskController.updateTaskStatus);

@@ -1,3 +1,4 @@
+const { z } = require('zod');
 const { db } = require('../database/database');
 const { executeQuery, handleUnknownError } = require('../utils/utility-funcs');
 
@@ -44,6 +45,18 @@ exports.getTasks = async (req, res) => {
   }
 };
 
+exports.getUpcomingTasks = async (req, res) => {
+  const userId = req.user.userId;
+  const querySql = `SELECT id, title, description, deadline, status FROM tasks WHERE user_id = ? AND DATE(deadline) BETWEEN DATE('now') AND DATE('now', '+6 days')`;
+  try {
+    executeQuery(res, querySql, [userId], (tasks) => {
+      res.status(200).json({ tasks, status: 200 });
+    });
+  } catch (error) {
+    handleUnknownError(res, error);
+  }
+};
+
 exports.getTodayTasksLength = async (req, res) => {
   const userId = req.user.userId;
   const getTodayTasksLengthSql = `SELECT COUNT(*) AS taskCount FROM tasks WHERE user_id = ? AND DATE(deadline) = DATE('now') AND status IN ('to do', 'doing')`;
@@ -57,21 +70,35 @@ exports.getTodayTasksLength = async (req, res) => {
   }
 };
 
+const taskSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  deadline: z.string(),
+  status: z.union([z.literal(0), z.literal(1)]),
+});
+
 exports.postTask = async (req, res) => {
   const userId = req.user.userId;
   const { title, description, deadline, status } = req.body;
 
-  if (!title || !description || !deadline || !status) {
-    return res.status(400).json({ error: 'Bad request', status: 400 });
+  const validateRequest = taskSchema.safeParse({ title, description, deadline, status });
+
+  if (!validateRequest.success) {
+    return res.status(400).json({ error: 'Invalid task data' });
   }
+
+  const validatedTitle = validateRequest.data.title;
+  const validatedDescription = validateRequest.data.description;
+  const validatedDeadline = validateRequest.data.deadline;
+  const validatedStatus = validateRequest.data.status;
 
   const insertTaskSql = `INSERT INTO tasks (title, description, deadline, status, user_id) VALUES (?, ?, ?, ?, ?)`;
 
   try {
-    db.run(insertTaskSql, [title, description, deadline, status, userId], function (err) {
+    db.run(insertTaskSql, [validatedTitle, validatedDescription, validatedDeadline, validatedStatus, userId], function (err) {
       if (err) {
         console.error('Error with creating task:', err.message);
-        return res.status(500).json({ error: 'Error with creating task', status: 500 });
+        return res.status(500).json({ error: 'Error with creating task' });
       }
       res.status(201).json({ message: 'Task created successfully', status: 201 });
     });
