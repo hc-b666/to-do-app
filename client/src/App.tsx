@@ -15,18 +15,6 @@ import { Upcoming } from "@/pages/dashboard/upcoming";
 import { Project } from "@/pages/dashboard/project";
 
 export const App = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (!token || isTokenExpired(token)) {
-      localStorage.removeItem("token");
-      navigate("/signin");
-    } else {
-      navigate("/dashboard");
-    }
-  }, [token]);
-
   return (
     <>
       <Routes>
@@ -38,6 +26,7 @@ export const App = () => {
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
+        <Route path="/" element={<Navigate to={localStorage.getItem("token") && !isTokenExpired(localStorage.getItem("token")) ? "/dashboard" : "/signin"} />} />
       </Routes>
       <ToastContainer />
     </>
@@ -46,19 +35,25 @@ export const App = () => {
 
 function PrivateRoutes() {
   const [sidebarState, setSidebarState] = useState(true);
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  return token ? (
-    <div className="flex h-screen">
+  useEffect(() => {
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      navigate("/signin");
+    }
+  }, [token, navigate]);
+
+  return token && !isTokenExpired(token) ? (
+    <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
-      <div className="flex w-full flex-col">
+      <div className="flex flex-1 flex-col overflow-x-auto">
         <Navbar sidebarState={sidebarState} setSidebarState={setSidebarState} />
         <Outlet />
       </div>
     </div>
-  ) : (
-    <Navigate to="/signup" />
-  );
+  ) : null; 
 }
 
 function isTokenExpired(token: string | null | undefined): boolean {

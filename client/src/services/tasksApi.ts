@@ -2,30 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getToken = () => localStorage.getItem("token");
 
-export interface StatusesData {
-  status: number;
-  statusSegments: string[];
-}
-
-export interface TasksData {
-  status: number;
-  tasks: Task[];
-}
-
-export interface TodayTasksLengthData {
-  status: number;
-  length: number;
-}
-
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  deadline: string;
-  status: string;
-}
-
-// ToDo - Corrert the type error or change everything to axios
 export const tasksApi = createApi({
   reducerPath: "tasksApi",
   baseQuery: fetchBaseQuery({
@@ -41,7 +17,7 @@ export const tasksApi = createApi({
   }),
   tagTypes: ["task", "status"],
   endpoints: (builder) => ({
-    getStatuses: builder.query<StatusesData, void>({
+    getStatuses: builder.query({
       query: () => ({
         url: `/getStatuses`,
         method: "GET",
@@ -55,7 +31,14 @@ export const tasksApi = createApi({
       }),
       providesTags: ["task"],
     }),
-    getTodayTasksLength: builder.query<TodayTasksLengthData, void>({
+    getUpcomingTasks: builder.query({
+      query: () => ({
+        url: "/getUpcomingTasks",
+        method: "GET",
+      }),
+      providesTags: ["task"],
+    }),
+    getTodayTasksLength: builder.query({
       query: () => ({
         url: "/getTodayTasksLength",
         method: "GET",
@@ -80,13 +63,22 @@ export const tasksApi = createApi({
       },
       invalidatesTags: ["task"],
     }),
+    deleteTask: builder.mutation({
+      query: (taskId) => ({
+        url: `/deleteTask/${taskId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["task"],
+    }),
   }),
 });
 
 export const {
   useGetStatusesQuery,
   useGetTasksQuery,
+  useGetUpcomingTasksQuery,
   useGetTodayTasksLengthQuery,
   usePostTaskMutation,
   useUpdateTaskStatusMutation,
+  useDeleteTaskMutation,
 } = tasksApi;

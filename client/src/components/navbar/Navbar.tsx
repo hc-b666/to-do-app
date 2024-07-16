@@ -1,10 +1,11 @@
-import { FC } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { FC, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { PanelRight, LogOut } from "lucide-react";
 import { useGetTodayTasksLengthQuery } from "@/services/tasksApi";
 import { capitalize } from "@/lib/capitalize";
 import { Button } from "../ui";
 import { ModeToggle } from "./ModeToggle";
+import { SignoutModal } from "../modals";
 
 interface INavbar {
   sidebarState: boolean;
@@ -12,7 +13,7 @@ interface INavbar {
 }
 
 export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
-  const navigate = useNavigate();
+  const [signoutModal, setSignoutModal] = useState(false);
   const { pathname } = useLocation();
   const { data: todayTaskLengthData } = useGetTodayTasksLengthQuery(undefined);
 
@@ -26,11 +27,6 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
     breadcrumbText = capitalize(pathSegments[1]);
   }
 
-  const signoutHandler = () => {
-    localStorage.removeItem("token");
-    navigate("/signup");
-  };
-
   const todayTasksText = todayTaskLengthData?.length ? (
     <div className="flex items-center gap-1">
       -
@@ -41,24 +37,29 @@ export const Navbar: FC<INavbar> = ({ sidebarState, setSidebarState }) => {
   );
 
   return (
-    <nav className="flex w-full items-center justify-between bg-white px-5 py-3 shadow dark:bg-black dark:shadow-none dark:border-b dark:border-gray-800">
-      <div className="flex items-center gap-5">
-        {!sidebarState && (
-          <button onClick={() => setSidebarState(true)}>
-            <PanelRight className="h-6 w-6 text-gray-500" />
-          </button>
-        )}
-        <p className="flex items-center gap-1">
-          {breadcrumbText} - {formattedDate} {todayTasksText}
-        </p>
-      </div>
+    <>
+      <nav className="flex w-full items-center justify-between bg-white px-5 py-3 shadow dark:border-b dark:border-gray-800 dark:bg-black dark:shadow-none">
+        <div className="flex items-center gap-5">
+          {!sidebarState && (
+            <button onClick={() => setSidebarState(true)}>
+              <PanelRight className="h-6 w-6 text-gray-500" />
+            </button>
+          )}
+          <p className="flex items-center gap-1">
+            {breadcrumbText} - {formattedDate} {todayTasksText}
+          </p>
+        </div>
 
-      <div className="flex items-center gap-4">
-        <ModeToggle />
-        <Button onClick={signoutHandler} variant={"secondary"}>
-          <LogOut className="mr-2 h-5 w-5" /> Sign Out
-        </Button>
-      </div>
-    </nav>
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+          <Button onClick={() => setSignoutModal(true)}>
+            <LogOut className="mr-2 h-5 w-5" /> Sign Out
+          </Button>
+        </div>
+      </nav>
+      {signoutModal && (
+        <SignoutModal state={signoutModal} setState={setSignoutModal} />
+      )}
+    </>
   );
 };

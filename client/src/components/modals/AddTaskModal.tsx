@@ -1,17 +1,10 @@
 import { FC, useState, useEffect } from "react";
-import { z } from "zod";
 import { toast } from "react-toastify";
 import { usePostTaskMutation } from "@/services/tasksApi";
+import { TaskSchema } from "@/schemas/task.schema";
 import { parseTimeFromTitle } from "@/lib/parseTimeFromTitle";
 import { Modal } from "@/components/modals";
 import { Button } from "@/components/ui";
-
-const TaskSchema = z.object({
-  title: z.string({ message: "Title is required" }),
-  description: z.string().optional(),
-  deadline: z.string({ message: "Deadline is required" }),
-  status: z.union([z.literal(0), z.literal(1)]),
-});
 
 interface IAddTaskModal {
   taskModal: boolean;
@@ -57,9 +50,8 @@ export const AddTaskModal: FC<IAddTaskModal> = ({
 
         if (res.status === 201) {
           setTaskModal(false);
-          toast.success("Task created successfully");
+          toast.success(res.message);
         }
-        console.log(res);
       } else if (validatedData.success === false) {
         toast.error(validatedData.error.errors[0].message);
       }

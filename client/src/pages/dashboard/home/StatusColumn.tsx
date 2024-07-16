@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { capitalize } from "@lib/capitalize";
+import { capitalize } from "@/lib/capitalize";
 import { TaskCard } from "./Task";
 
 interface Task {

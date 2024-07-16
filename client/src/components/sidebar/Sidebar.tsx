@@ -21,7 +21,7 @@ export const Sidebar: FC<ISidebar> = ({ sidebarState, setSidebarState }) => {
   return (
     <>
       <aside
-        className={`${sidebarState ? "w-[350px]" : "w-0 opacity-0"} flex min-h-screen flex-col shadow-lg transition-all dark:shadow-none dark:border-r dark:border-gray-800 duration-500 ease-in-out dark:bg-black`}
+        className={`${sidebarState ? "w-[280px]" : "w-0 opacity-0"} flex h-full flex-col shadow-lg transition-all dark:shadow-none dark:border-r dark:border-gray-800 duration-500 ease-in-out dark:bg-black`}
       >
         <div
           className={`flex h-full flex-col p-6 ${sidebarState ? "opacity-100" : "pointer-events-none opacity-0"} transition-opacity duration-500 ease-in-out`}
