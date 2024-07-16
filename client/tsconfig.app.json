@@ -26,13 +26,8 @@
     /* Alias */
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@pages/*": ["src/pages/*"],
-      "@lib/*": ["src/lib/*"],
-      "@services/*": ["src/services/*"],
-      "@app/*": ["src/app/*"],
-      "@context/*": ["src/context/*"],
-    },
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

@@ -1,5 +1,5 @@
-import { useGetProjectQuery } from "@services/projectsApi";
 import { useParams } from "react-router-dom";
+import { useGetProjectQuery } from "@/services/projectsApi";
 
 export const Project = () => {
   const { projectId } = useParams();

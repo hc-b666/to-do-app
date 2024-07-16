@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Sidebar } from "@components/sidebar";
-import { Navbar } from "@components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Signup from "@pages/auth/Signup";
-import Singin from "@pages/auth/Signin";
-import { Home } from "@pages/dashboard/home";
-import Upcoming from "@pages/dashboard/Upcoming";
-import { Project } from "@pages/dashboard/project";
+// Elements
+import { Sidebar } from "@/components/sidebar";
+import { Navbar } from "@/components/navbar";
+
+// Pages
+import { Signup, Signin } from "@/pages/auth";
+import { Today } from "@/pages/dashboard/today";
+import { Upcoming } from "@/pages/dashboard/upcoming";
+import { Project } from "@/pages/dashboard/project";
 
 export const App = () => {
   const navigate = useNavigate();
@@ -29,9 +31,9 @@ export const App = () => {
     <>
       <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Singin />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/dashboard" element={<PrivateRoutes />}>
-          <Route path="" element={<Home />} />
+          <Route path="" element={<Today />} />
           <Route path="upcoming" element={<Upcoming />} />
           <Route path="projects/:projectId" element={<Project />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />

@@ -48,7 +48,7 @@ export const tasksApi = createApi({
       }),
       providesTags: ["status"],
     }),
-    getTasks: builder.query<TasksData, void>({
+    getTasks: builder.query({
       query: () => ({
         url: "/getTasks",
         method: "GET",
@@ -62,7 +62,7 @@ export const tasksApi = createApi({
       }),
       providesTags: ["task"],
     }),
-    postTask: builder.mutation<unknown, Partial<Task>>({
+    postTask: builder.mutation({
       query: (body) => ({
         url: "/postTask",
         method: "POST",

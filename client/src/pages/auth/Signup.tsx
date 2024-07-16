@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useSignupMutation } from "@services/authApi";
-import { signupSchema } from "../../schemas/register.schema";
+import { useSignupMutation } from "@/services/authApi";
+import { signupSchema } from "@/schemas/register.schema";
 
-const Signup = () => {
+export const Signup = () => {
   const navigate = useNavigate();
   const [signup] = useSignupMutation();
 
@@ -108,5 +108,3 @@ const Signup = () => {
     </main>
   );
 };
-
-export default Signup;

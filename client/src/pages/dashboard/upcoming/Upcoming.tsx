@@ -1,4 +1,4 @@
-const Upcoming = () => {
+export const Upcoming = () => {
 
   return (
     <div>
@@ -6,6 +6,3 @@ const Upcoming = () => {
     </div>
   );
 };
-
-export default Upcoming;
-

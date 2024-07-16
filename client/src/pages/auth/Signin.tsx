@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useSigninMutation } from "@services/authApi";
-import { signinSchema } from "../../schemas/register.schema";
+import { useSigninMutation } from "@/services/authApi";
+import { signinSchema } from "@/schemas/register.schema";
 
-const Signin = () => {
+export const Signin = () => {
   const navigate = useNavigate();
   const [signin] = useSigninMutation();
 
@@ -26,7 +26,7 @@ const Signin = () => {
           password: validatedData.data.password,
         }).unwrap();
 
-        if (res.status === 201) {
+        if (res.status === 200) {
           localStorage.setItem("token", res.token);
           navigate("/dashboard");
         }
@@ -108,5 +108,3 @@ const Signin = () => {
     </main>
   );
 };
-
-export default Signin;

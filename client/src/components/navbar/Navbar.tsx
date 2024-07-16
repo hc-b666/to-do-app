@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PanelRight, LogOut } from "lucide-react";
-import { useGetTodayTasksLengthQuery } from "@services/tasksApi";
-import { Button } from "./ui/button";
+import { useGetTodayTasksLengthQuery } from "@/services/tasksApi";
+import { capitalize } from "@/lib/capitalize";
+import { Button } from "../ui";
 import { ModeToggle } from "./ModeToggle";
-import { capitalize } from "@lib/capitalize";
 
 interface INavbar {
   sidebarState: boolean;

@@ -1,6 +1,6 @@
 import { useState, KeyboardEvent } from "react";
-import { Input } from "./input";
 import { X } from "lucide-react";
+import { Input } from "./input";
 
 interface MultiInputProps {
   name: string;

@@ -1,18 +1,17 @@
 import { FC, useState, useEffect } from "react";
-import { useGetStatusesQuery, usePostTaskMutation } from "@services/tasksApi";
-import { capitalize } from "@lib/capitalize";
-import { parseTimeFromTitle } from "@lib/parseTimeFromTitle";
-import Modal from "@components/Modal";
-import { Button } from "@components/ui/button";
-import { useToast } from "@components/ui/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/ui/select";
+import { z } from "zod";
+import { toast } from "react-toastify";
+import { usePostTaskMutation } from "@/services/tasksApi";
+import { parseTimeFromTitle } from "@/lib/parseTimeFromTitle";
+import { Modal } from "@/components/modals";
+import { Button } from "@/components/ui";
+
+const TaskSchema = z.object({
+  title: z.string({ message: "Title is required" }),
+  description: z.string().optional(),
+  deadline: z.string({ message: "Deadline is required" }),
+  status: z.union([z.literal(0), z.literal(1)]),
+});
 
 interface IAddTaskModal {
   taskModal: boolean;
@@ -25,9 +24,7 @@ export const AddTaskModal: FC<IAddTaskModal> = ({
 }) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
-  const { data: statusesData } = useGetStatusesQuery(undefined);
   const [postTask] = usePostTaskMutation();
-  const { toast } = useToast();
 
   useEffect(() => {
     const parsedDeadline = parseTimeFromTitle(title);
@@ -43,25 +40,38 @@ export const AddTaskModal: FC<IAddTaskModal> = ({
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await postTask(data);
+      const validatedData = TaskSchema.safeParse({
+        title: data.title,
+        description: data.description,
+        deadline: data.deadline,
+        status: 0,
+      });
 
-      if (res.error) {
-        toast({
-          title: "An error occurred while creating the task",
-          duration: 5000,
-        });
-        return;
-      }
+      if (validatedData.success === true) {
+        const res = await postTask({
+          title: validatedData.data.title,
+          description: validatedData.data.description,
+          deadline: validatedData.data.deadline,
+          status: validatedData.data.status,
+        }).unwrap();
 
-      if (res.data) {
-        toast({
-          title: "Task created successfully",
-          duration: 5000,
-        });
-        setTaskModal(false);
+        if (res.status === 201) {
+          setTaskModal(false);
+          toast.success("Task created successfully");
+        }
+        console.log(res);
+      } else if (validatedData.success === false) {
+        toast.error(validatedData.error.errors[0].message);
       }
     } catch (error) {
       console.log(error);
+      const typedError = error as { status?: number; data?: { error: string } };
+
+      if (typedError.status) {
+        if (typedError.data && typedError.data.error) {
+          toast.error(typedError.data.error);
+        }
+      }
     }
   };
 
@@ -97,21 +107,6 @@ export const AddTaskModal: FC<IAddTaskModal> = ({
             className="cursor-pointer rounded-lg border-2 text-sm shadow"
             onChange={(e) => setDeadline(e.target.value)}
           />
-
-          <Select name="status" defaultValue={statusesData?.statusSegments[0]}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {statusesData?.statusSegments.map((status: string) => (
-                  <SelectItem value={status} key={status}>
-                    {capitalize(status)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="mt-3 flex w-full justify-end gap-3 border-t pt-3">

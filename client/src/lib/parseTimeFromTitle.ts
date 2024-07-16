@@ -1,5 +1,5 @@
 export const parseTimeFromTitle = (title: string) => {
-  const timePattern = /at\s(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i;
+  const timePattern = /(?:at|by)\s(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i;
   const match = title.match(timePattern);
 
   if (match) {

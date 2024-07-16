@@ -30,14 +30,4 @@ export {
   SelectTrigger,
   SelectValue,
 } from "./select";
-export {
-  Toast,
-  ToastAction,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from "./toast";
-export { Toaster } from "./toaster";
-export { reducer, toast, useToast } from "./use-toast";
+export { MultiInput } from "./multi-input";

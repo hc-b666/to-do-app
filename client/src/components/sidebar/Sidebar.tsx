@@ -1,11 +1,10 @@
 import { FC, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { AddTaskModal } from "./add-task-modal";
 import { PanelRight } from "lucide-react";
-import { Button } from "@components/ui";
-import { AddProjectModal } from "./add-project-modal";
-import { useGetProjectsQuery } from "@services/projectsApi";
-import { capitalize } from "@lib/capitalize";
+import { AddTaskModal, AddProjectModal } from "../modals";
+import { Button } from "@/components/ui";
+import { useGetProjectsQuery } from "@/services/projectsApi";
+import { capitalize } from "@/lib/capitalize";
 
 interface ISidebar {
   sidebarState: boolean;

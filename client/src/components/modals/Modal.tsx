@@ -6,7 +6,7 @@ interface IModal {
   setState: (state: boolean) => void;
 }
 
-const Modal: FC<IModal> = ({ children, setState }) => {
+export const Modal: FC<IModal> = ({ children, setState }) => {
   return (
     <div
       onClick={() => setState(false)}
@@ -23,5 +23,3 @@ const Modal: FC<IModal> = ({ children, setState }) => {
     </div>
   );
 };
-
-export default Modal;

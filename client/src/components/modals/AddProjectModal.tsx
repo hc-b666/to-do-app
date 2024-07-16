@@ -1,15 +1,11 @@
 import { FC, useState } from "react";
-import Modal from "@components/Modal";
-import { Input } from "@components/ui/input";
-import { Label } from "@components/ui/label";
-import { Button } from "@components/ui/button";
+import { X } from "lucide-react";
+import { Modal } from "@/components/modals";
+import { Input, Label, Button, MultiInput } from "@/components/ui";
 import {
   usePostProjectMutation,
   useSearchUsersIdMutation,
-} from "@services/projectsApi";
-import { useToast } from "@components/ui/use-toast";
-import { MultiInput } from "@components/ui/multi-input";
-import { X } from "lucide-react";
+} from "@/services/projectsApi";
 
 interface IAddProjectModal {
   projectModal: boolean;
@@ -22,7 +18,6 @@ export const AddProjectModal: FC<IAddProjectModal> = ({
 }) => {
   const [usePostProject] = usePostProjectMutation();
   const [searchUsersId, { data: usersData }] = useSearchUsersIdMutation();
-  const { toast } = useToast();
   const [statuses, setStatuses] = useState<string[]>([
     "to do",
     "in progress",
@@ -63,18 +58,10 @@ export const AddProjectModal: FC<IAddProjectModal> = ({
       console.log(res);
 
       if (res.error) {
-        toast({
-          title: "An error occurred while creating the project",
-          duration: 5000,
-        });
         return;
       }
 
       if (res.data) {
-        toast({
-          title: "Project created successfully",
-          duration: 5000,
-        });
         setProjectModal(false);
       }
     } catch (error) {
